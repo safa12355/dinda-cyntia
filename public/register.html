@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrasi Hotspot Meow 🐾</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #fceade 0%, #fbc5d4 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #4a3b32;
+        }
+
+        .container {
+            background: #fffaf7;
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(138, 92, 75, 0.15);
+            border: 3px dashed #f2b8c6;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 { color: #5c4033; font-size: 26px; margin-bottom: 10px; }
+        .header p { color: #8a5c4b; font-size: 14px; font-weight: 500; }
+
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; color: #5c4033; font-weight: 600; font-size: 14px; }
+        
+        .form-group input {
+            width: 100%; padding: 12px 16px; border: 2px solid #e6d5cc;
+            border-radius: 12px; font-size: 14px; background: #fff; color: #4a3b32;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+        .form-group input:focus { 
+            border-color: #d88c9a; 
+            box-shadow: 0 0 0 4px rgba(216, 140, 154, 0.15);
+        }
+
+        .btn {
+            width: 100%; padding: 14px; background: linear-gradient(135deg, #d88c9a 0%, #f2b8c6 100%);
+            color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer;
+            box-shadow: 0 4px 15px rgba(216, 140, 154, 0.4);
+            transition: all 0.3s ease;
+        }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(216, 140, 154, 0.6); opacity: 0.95; }
+        .btn:active { transform: translateY(0); }
+        .btn:disabled { background: #e0d5ce; color: #a3968e; cursor: not-allowed; transform: none; box-shadow: none; }
+
+        .message { padding: 15px; border-radius: 12px; margin-top: 20px; display: none; font-weight: 500; animation: fadeIn 0.3s ease forwards; }
+        .message.success { background: #e8f5e9; color: #2b9348; border: 1px solid #c7e9c0; }
+        .message.error { background: #ffebee; color: #c9184a; border: 1px solid #ffcdd2; }
+
+        .login-link { text-align: center; margin-top: 20px; color: #7f6353; font-size: 14px; }
+        .login-link a { color: #d88c9a; text-decoration: none; font-weight: 600; transition: color 0.2s; }
+        .login-link a:hover { text-decoration: underline; color: #b86b7a; }
+
+        .loading {
+            display: inline-block; width: 18px; height: 18px;
+            border: 3px solid rgba(255, 255, 255, 0.4); border-radius: 50%; border-top-color: white;
+            animation: spin 1s ease-in-out infinite; margin-right: 8px; vertical-align: middle;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🐾 Registrasi Anabul</h1>
+            <p>Daftar untuk akses WiFi gratis, meow~</p>
+        </div>
+
+        <form id="registerForm">
+            <div class="form-group">
+                <label for="name">Nama Lengkap</label>
+                <input type="text" id="name" name="name" required placeholder="Masukkan nama lengkap">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required placeholder="Masukkan email">
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Nomor Telepon</label>
+                <input type="tel" id="phone" name="phone" required placeholder="Masukkan nomor telepon">
+            </div>
+
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required placeholder="Masukkan username">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required placeholder="Masukkan password">
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">Konfirmasi Password</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Konfirmasi password">
+            </div>
+
+            <button type="submit" class="btn" id="submitBtn">
+                <span id="btnText">Daftar Sekarang 🐾</span>
+            </button>
+        </form>
+
+        <div class="message" id="message"></div>
+
+        <div class="login-link">
+            Sudah punya akun? <a href="login.html">Login di sini 🐾</a>
+        </div>
+    </div>
+
+    <script>
+        const BACKEND_URL = window.location.origin.includes('vercel.app') 
+            ? window.location.origin 
+            : 'https://mikrotik-hostpot-login-done.vercel.app';
+
+        const form = document.getElementById('registerForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const btnText = document.getElementById('btnText');
+        const message = document.getElementById('message');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (password !== confirmPassword) {
+                showMessage('Password tidak cocok, meow! 😿', 'error');
+                return;
+            }
+
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                username: document.getElementById('username').value,
+                password: password
+            };
+
+            submitBtn.disabled = true;
+            btnText.innerHTML = '<span class="loading"></span> Memproses...';
+
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showMessage(data.message + ' Mengalihkan ke halaman login, meow~', 'success');
+                    form.reset();
+
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 2000);
+                } else {
+                    showMessage(data.message, 'error');
+                }
+            } catch (error) {
+                showMessage('Terjadi kesalahan koneksi ke server backend.', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                btnText.textContent = 'Daftar Sekarang 🐾';
+            }
+        });
+
+        function showMessage(text, type) {
+            message.textContent = text;
+            message.className = `message ${type}`;
+            message.style.display = 'block';
+
+            setTimeout(() => {
+                message.style.display = 'none';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
