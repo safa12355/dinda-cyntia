@@ -7,7 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
     <style>
-
         :root {
             --night: #12152a;
             --fur: #2a2f5c;
@@ -32,7 +31,6 @@
             background-size: auto, auto, 150px 150px;
             background-attachment: fixed;
         }
-        /* Telinga kucing di atas kartu */
         .spots {
             position: absolute; top: 0; left: 0; right: 0; height: 0;
             pointer-events: none;
@@ -47,7 +45,6 @@
         }
         .spots::before { left: 26px; transform: rotate(-14deg); }
         .spots::after { right: 26px; transform: rotate(14deg); }
-
         .mono { font-family: 'Nunito', sans-serif; font-weight: 700; }
         .brand { font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 32px; line-height: 1.1; color: #fff; text-shadow: 0 0 18px rgba(207, 212, 255, 0.4); }
         .tagline { display: inline-block; margin-top: 10px; padding: 3px 14px; border-radius: 999px; border: 2px solid var(--eye); color: var(--eye); font-size: 12px; font-weight: 700; }
@@ -57,10 +54,7 @@
             background: linear-gradient(180deg, #e6ff6a 0%, var(--eye) 50%, #b8e02a 100%);
             color: var(--night); font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 15px; letter-spacing: 0.04em;
             cursor: pointer; box-shadow: 0 4px 0 #7d9412, 0 8px 18px rgba(217, 245, 74, 0.2);
-            transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.2s ease;
         }
-        .btn-refresh:hover { filter: brightness(1.06); }
-        .btn-refresh:active { transform: translateY(3px); box-shadow: 0 1px 0 #7d9412; }
         .metric { padding: 18px 20px; border-radius: 22px; background: linear-gradient(170deg, var(--fur) 0%, var(--fur2) 100%); border: 3px solid var(--edge); box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4); }
         .metric .label { font-size: 13px; font-weight: 700; color: var(--whisker); }
         .metric .num { margin-top: 6px; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 46px; line-height: 1; }
@@ -71,11 +65,10 @@
         .metric.approved .num { color: var(--mint); }
         .metric.rejected { border-color: var(--danger); }
         .metric.rejected .num { color: var(--danger); }
-        .panel { position: relative; padding: 30px 24px 22px; border-radius: 30px; background: linear-gradient(170deg, var(--fur) 0%, var(--fur2) 100%); border: 3px solid var(--edge); box-shadow: 0 25px 50px rgba(0, 0, 0, 0.55), 0 0 40px rgba(217, 245, 74, 0.06); }
+        .panel { position: relative; padding: 30px 24px 22px; border-radius: 30px; background: linear-gradient(170deg, var(--fur) 0%, var(--fur2) 100%); border: 3px solid var(--edge); box-shadow: 0 25px 50px rgba(0, 0, 0, 0.55); }
         .panel h2 { display: inline-block; margin-bottom: 16px; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 22px; color: #fff; }
         thead tr { border-bottom: 2px dashed var(--edge) !important; }
         thead th { color: var(--whisker) !important; font-size: 13px; font-weight: 700; }
-        #userTableBody { font-size: 13px; }
         .row { border-bottom: 1px solid #343a6b; transition: background 0.15s ease; }
         .row:hover { background: rgba(207, 212, 255, 0.07); }
         .cell-name { color: #fff; font-weight: 800; }
@@ -88,59 +81,33 @@
         .badge-ok { background: rgba(123, 224, 208, 0.15); color: var(--mint); border-color: var(--mint); }
         .badge-no { background: rgba(255, 143, 163, 0.15); color: var(--danger); border-color: var(--danger); }
         .badge-wait { background: rgba(217, 245, 74, 0.13); color: var(--eye); border-color: var(--eye); }
-        .act { padding: 6px 14px; border: none; border-radius: 12px; font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 800; cursor: pointer; box-shadow: 0 3px 0 rgba(0, 0, 0, 0.45); transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.2s ease; }
-        .act:hover { filter: brightness(1.1); }
-        .act:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(0, 0, 0, 0.45); }
+        .act { padding: 6px 14px; border: none; border-radius: 12px; font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 800; cursor: pointer; box-shadow: 0 3px 0 rgba(0, 0, 0, 0.45); }
         .act-approve { background: var(--mint); color: #0b3a34; }
         .act-reject { background: var(--nose); color: #4a0f24; }
         .act-drop { background: var(--fur); color: var(--whisker); box-shadow: 0 0 0 2px var(--edge), 0 3px 0 rgba(0, 0, 0, 0.45); }
-        .act-drop:hover { background: #5a1f3a; color: #fff; }
-        .btn-refresh:focus-visible, .act:focus-visible { outline: 3px solid var(--whisker); outline-offset: 3px; }
-    
     </style>
 </head>
 <body class="p-6">
     <div class="max-w-7xl mx-auto space-y-8">
-
-        <!-- Header -->
         <div class="flex justify-between items-center head-line pb-5">
             <div>
                 <h1 class="brand flex items-center gap-3">
                     <span class="w-4 h-4 rounded-full animate-pulse" style="background: var(--eye); box-shadow: 0 0 14px var(--eye);"></span>
                     MEOW HOTSPOT ADMIN
                 </h1>
-                <p class="tagline">🐾 RouterOS Interface: wlan1-hotspot</p>
+                <p class="tagline">📡 RouterOS Interface: wlan1-hotspot</p>
             </div>
-            <button onclick="loadUsers()" class="btn-refresh flex items-center gap-2">
-                🔄 REFRESH DATA
-            </button>
+            <button onclick="loadUsers()" class="btn-refresh flex items-center gap-2">🔄 REFRESH DATA</button>
         </div>
-
-        <!-- Metric Cards -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
-            <div class="metric total">
-                <div class="label">Total Registrations</div>
-                <div class="num" id="totalCount">0</div>
-            </div>
-            <div class="metric pending">
-                <div class="label">Pending Approval</div>
-                <div class="num" id="pendingCount">0</div>
-            </div>
-            <div class="metric approved">
-                <div class="label">Approved / Active</div>
-                <div class="num" id="approvedCount">0</div>
-            </div>
-            <div class="metric rejected">
-                <div class="label">Blocked / Rejected</div>
-                <div class="num" id="rejectedCount">0</div>
-            </div>
+            <div class="metric total"><div class="label">Total Registrations</div><div class="num" id="totalCount">0</div></div>
+            <div class="metric pending"><div class="label">Pending Approval</div><div class="num" id="pendingCount">0</div></div>
+            <div class="metric approved"><div class="label">Approved / Active</div><div class="num" id="approvedCount">0</div></div>
+            <div class="metric rejected"><div class="label">Blocked / Rejected</div><div class="num" id="rejectedCount">0</div></div>
         </div>
-
-        <!-- Table Section -->
         <div class="panel">
             <div class="spots"></div>
             <h2>🐾 Subscriber Active Session Table 🐾</h2>
-
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
@@ -153,20 +120,19 @@
                         </tr>
                     </thead>
                     <tbody id="userTableBody" class="text-xs mono">
-                        <tr>
-                            <td colspan="5" class="p-4 text-center msg-empty">Memuat data dari Upstash Redis...</td>
-                        </tr>
+                        <tr><td colspan="5" class="p-4 text-center msg-empty">Memuat data dari Upstash Redis...</td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-
     <script>
+        const BACKEND_URL = '';
+
         async function loadUsers() {
             const tableBody = document.getElementById('userTableBody');
             try {
-                const response = await fetch('/api/users');
+                const response = await fetch(`${BACKEND_URL}/api/users`);
                 const data = await response.json();
 
                 if (!data.success || !data.users) {
@@ -175,8 +141,6 @@
                 }
 
                 const users = data.users;
-
-                // Update Counter
                 document.getElementById('totalCount').textContent = users.length;
                 document.getElementById('pendingCount').textContent = users.filter(u => u.status === 'pending').length;
                 document.getElementById('approvedCount').textContent = users.filter(u => u.status === 'approved').length;
@@ -187,16 +151,10 @@
                     return;
                 }
 
-                // Render Data Table
                 tableBody.innerHTML = users.map(user => {
-                    let statusBadge = '';
-                    if (user.status === 'approved') {
-                        statusBadge = `<span class="badge badge-ok">ACCEPTED</span>`;
-                    } else if (user.status === 'rejected') {
-                        statusBadge = `<span class="badge badge-no">REJECTED</span>`;
-                    } else {
-                        statusBadge = `<span class="badge badge-wait">PENDING</span>`;
-                    }
+                    let statusBadge = user.status === 'approved' ? `<span class="badge badge-ok">ACCEPTED</span>` :
+                                      user.status === 'rejected' ? `<span class="badge badge-no">REJECTED</span>` :
+                                      `<span class="badge badge-wait">PENDING</span>`;
 
                     const dateStr = user.createdAt ? new Date(user.createdAt).toLocaleString('id-ID') : '-';
 
@@ -222,7 +180,6 @@
                         </tr>
                     `;
                 }).join('');
-
             } catch (err) {
                 console.error(err);
                 tableBody.innerHTML = `<tr><td colspan="5" class="p-4 text-center msg-error">Terjadi kesalahan koneksi ke API.</td></tr>`;
@@ -232,7 +189,7 @@
         async function approveUser(username) {
             if (!confirm(`Setujui pendaftaran ${username}?`)) return;
             try {
-                const res = await fetch('/api/approve', {
+                const res = await fetch(`${BACKEND_URL}/api/approve`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username, adminName: 'Admin' })
@@ -240,15 +197,13 @@
                 const result = await res.json();
                 alert(result.message);
                 loadUsers();
-            } catch (e) {
-                alert('Gagal menyetujui user');
-            }
+            } catch (e) { alert('Gagal menyetujui user'); }
         }
 
         async function rejectUser(username) {
             if (!confirm(`Tolak pendaftaran ${username}?`)) return;
             try {
-                const res = await fetch('/api/reject', {
+                const res = await fetch(`${BACKEND_URL}/api/reject`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username, adminName: 'Admin' })
@@ -256,24 +211,19 @@
                 const result = await res.json();
                 alert(result.message);
                 loadUsers();
-            } catch (e) {
-                alert('Gagal menolak user');
-            }
+            } catch (e) { alert('Gagal menolak user'); }
         }
 
         async function deleteUser(username) {
             if (!confirm(`Hapus permanen user ${username}?`)) return;
             try {
-                const res = await fetch(`/api/users/${username}`, { method: 'DELETE' });
+                const res = await fetch(`${BACKEND_URL}/api/users/${username}`, { method: 'DELETE' });
                 const result = await res.json();
                 alert(result.message);
                 loadUsers();
-            } catch (e) {
-                alert('Gagal menghapus user');
-            }
+            } catch (e) { alert('Gagal menghapus user'); }
         }
 
-        // Jalankan saat halaman selesai dimuat
         document.addEventListener('DOMContentLoaded', loadUsers);
     </script>
 </body>
