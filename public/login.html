@@ -3,161 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Hotspot Meow 🐾</title>
+    <title>Hotspot Login - Meow Network</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
     <style>
+
+        :root {
+            --night: #12152a;
+            --fur: #2a2f5c;
+            --fur2: #1b1f3d;
+            --edge: #4b5290;
+            --whisker: #cfd4ff;
+            --nose: #ff9bb3;
+            --eye: #d9f54a;
+            --mint: #7be0d0;
+            --danger: #ff8fa3;
+        }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes pulseIcon {
-            0% { transform: scale(1); box-shadow: 0 4px 15px rgba(216, 140, 154, 0.4); }
-            50% { transform: scale(1.05); box-shadow: 0 6px 22px rgba(216, 140, 154, 0.6); }
-            100% { transform: scale(1); box-shadow: 0 4px 15px rgba(216, 140, 154, 0.4); }
-        }
-
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #fceade 0%, #fbc5d4 100%);
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            color: #4a3b32;
+            color: #fff;
+            font-family: 'Nunito', sans-serif;
+            background-color: var(--night);
+            background-image:
+                radial-gradient(circle at 15% 10%, rgba(120, 100, 255, 0.28), transparent 42%),
+                radial-gradient(circle at 88% 90%, rgba(123, 224, 208, 0.16), transparent 42%),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 150 150'%3E%3Cg fill='%23ffffff' fill-opacity='.055'%3E%3Cg transform='translate(36 44) rotate(-20)'%3E%3Cellipse cx='0' cy='7' rx='10' ry='8.5'/%3E%3Cellipse cx='-12' cy='-6' rx='3.8' ry='5'/%3E%3Cellipse cx='-4.5' cy='-13' rx='3.8' ry='5.2'/%3E%3Cellipse cx='4.5' cy='-13' rx='3.8' ry='5.2'/%3E%3Cellipse cx='12' cy='-6' rx='3.8' ry='5'/%3E%3C/g%3E%3Cg transform='translate(108 110) rotate(24)'%3E%3Cellipse cx='0' cy='7' rx='10' ry='8.5'/%3E%3Cellipse cx='-12' cy='-6' rx='3.8' ry='5'/%3E%3Cellipse cx='-4.5' cy='-13' rx='3.8' ry='5.2'/%3E%3Cellipse cx='4.5' cy='-13' rx='3.8' ry='5.2'/%3E%3Cellipse cx='12' cy='-6' rx='3.8' ry='5'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            background-size: auto, auto, 150px 150px;
+            background-attachment: fixed;
         }
+        /* Telinga kucing di atas kartu */
+        .spots {
+            position: absolute; top: 0; left: 0; right: 0; height: 0;
+            pointer-events: none;
+            filter: drop-shadow(2px 0 0 var(--edge)) drop-shadow(-2px 0 0 var(--edge)) drop-shadow(0 -2px 0 var(--edge));
+        }
+        .spots::before, .spots::after {
+            content: ""; position: absolute; bottom: -3px;
+            width: 58px; height: 58px;
+            clip-path: polygon(0 100%, 50% 0, 100% 100%);
+            background: radial-gradient(ellipse 26% 42% at 50% 88%, var(--nose) 97%, transparent 100%), var(--fur);
+            transform-origin: 50% 100%;
+        }
+        .spots::before { left: 26px; transform: rotate(-14deg); }
+        .spots::after { right: 26px; transform: rotate(14deg); }
 
+        body { display: flex; justify-content: center; align-items: center; padding: 44px 20px 28px; }
         .container {
-            background: #fffaf7;
-            border-radius: 24px;
-            box-shadow: 0 15px 35px rgba(138, 92, 75, 0.15);
-            border: 3px dashed #f2b8c6;
-            padding: 40px;
-            max-width: 450px;
-            width: 100%;
-            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            position: relative; width: 100%; max-width: 430px;
+            padding: 34px 32px 30px; border-radius: 30px;
+            background: linear-gradient(170deg, var(--fur) 0%, var(--fur2) 100%);
+            border: 3px solid var(--edge);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6), 0 0 40px rgba(217, 245, 74, 0.07);
         }
-
-        .header { text-align: center; margin-bottom: 30px; }
-        .header h1 { color: #5c4033; font-size: 26px; margin-bottom: 10px; }
-        .header p { color: #8a5c4b; font-size: 14px; font-weight: 500; }
-        
-        .wifi-icon {
-            width: 80px; height: 80px; margin: 0 auto 20px;
-            background: linear-gradient(135deg, #d88c9a 0%, #f2b8c6 100%);
-            border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 36px;
-            animation: pulseIcon 2.5s infinite ease-in-out;
+        .terminal-bar { display: flex; align-items: center; gap: 7px; margin-bottom: 20px; }
+        .terminal-dot { width: 12px; height: 12px; border-radius: 50%; }
+        .dot-red { background: var(--nose); }
+        .dot-yellow { background: var(--eye); }
+        .dot-green { background: var(--mint); }
+        .terminal-title { margin-left: auto; font-size: 12px; font-weight: 700; color: var(--whisker); }
+        .header { text-align: center; margin-bottom: 26px; }
+        .racing-icon {
+            width: 76px; height: 76px; margin: 0 auto 12px;
+            display: flex; justify-content: center; align-items: center; font-size: 38px;
+            border-radius: 50%; background: var(--night); border: 3px solid var(--eye);
+            box-shadow: 0 0 0 4px rgba(217, 245, 74, 0.18), 0 0 22px rgba(217, 245, 74, 0.35);
         }
-
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; margin-bottom: 8px; color: #5c4033; font-weight: 600; font-size: 14px; }
-        
+        .header h1 {
+            font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 38px; line-height: 1.1;
+            color: #fff; text-shadow: 0 0 18px rgba(207, 212, 255, 0.4); margin-bottom: 12px;
+        }
+        .header p {
+            display: inline-block; padding: 4px 16px; border-radius: 999px;
+            border: 2px solid var(--eye); color: var(--eye); font-size: 13px; font-weight: 700;
+        }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 6px; padding-left: 4px; color: var(--whisker); font-size: 14px; font-weight: 700; }
         .form-group input {
-            width: 100%; padding: 12px 16px; border: 2px solid #e6d5cc;
-            border-radius: 12px; font-size: 14px; background: #fff; color: #4a3b32;
-            transition: all 0.3s ease;
-            outline: none;
+            width: 100%; padding: 12px 16px; background: #0e1124; border: 2px solid #3d4478;
+            border-radius: 16px; font-size: 14px; font-weight: 600; font-family: 'Nunito', sans-serif;
+            color: #fff; outline: none; transition: box-shadow 0.2s ease, border-color 0.2s ease;
         }
-        .form-group input:focus { 
-            border-color: #d88c9a; 
-            box-shadow: 0 0 0 4px rgba(216, 140, 154, 0.15);
-        }
-
+        .form-group input::placeholder { color: #7a82b8; font-weight: 500; }
+        .form-group input:focus { border-color: var(--eye); box-shadow: 0 0 0 4px rgba(217, 245, 74, 0.18); }
         .btn {
-            width: 100%; padding: 14px; background: linear-gradient(135deg, #d88c9a 0%, #f2b8c6 100%);
-            color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer;
-            box-shadow: 0 4px 15px rgba(216, 140, 154, 0.4);
-            transition: all 0.3s ease;
+            width: 100%; margin-top: 8px; padding: 13px; border: none; border-radius: 16px;
+            background: linear-gradient(180deg, #e6ff6a 0%, var(--eye) 50%, #b8e02a 100%);
+            color: var(--night); font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 20px; letter-spacing: 0.05em;
+            cursor: pointer; box-shadow: 0 5px 0 #7d9412, 0 10px 22px rgba(217, 245, 74, 0.22);
+            transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.2s ease;
         }
-        .btn:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(216, 140, 154, 0.6); opacity: 0.95; }
-        .btn:active { transform: translateY(0); }
-        .btn:disabled { background: #e0d5ce; color: #a3968e; cursor: not-allowed; transform: none; box-shadow: none; }
-
-        .message { padding: 15px; border-radius: 12px; margin-top: 20px; display: none; font-weight: 500; animation: fadeIn 0.3s ease forwards; }
-        .message.success { background: #e8f5e9; color: #2b9348; border: 1px solid #c7e9c0; }
-        .message.error { background: #ffebee; color: #c9184a; border: 1px solid #ffcdd2; }
-        .message.info { background: #fefae0; color: #bc6c25; border: 1px solid #fdf0d5; }
-
-        .register-link { text-align: center; margin-top: 20px; color: #7f6353; font-size: 14px; }
-        .register-link a { color: #d88c9a; text-decoration: none; font-weight: 600; transition: color 0.2s; }
-        .register-link a:hover { text-decoration: underline; color: #b86b7a; }
-
-        .loading {
-            display: inline-block; width: 18px; height: 18px;
-            border: 3px solid rgba(255, 255, 255, 0.4); border-radius: 50%; border-top-color: white;
-            animation: spin 1s ease-in-out infinite; margin-right: 8px; vertical-align: middle;
-        }
+        .btn:hover { filter: brightness(1.06); }
+        .btn:active { transform: translateY(4px); box-shadow: 0 1px 0 #7d9412; }
+        .btn:disabled { background: #3d4478; color: #9aa2d8; box-shadow: 0 4px 0 #23284a; cursor: not-allowed; }
+        .btn:focus-visible, .toggle-status:focus-visible, .status-check button:focus-visible { outline: 3px solid var(--whisker); outline-offset: 3px; }
+        .message { padding: 12px 16px; border-radius: 14px; margin-top: 16px; display: none; font-size: 13px; font-weight: 700; text-align: center; border: 2px solid; }
+        .message.success { background: rgba(123, 224, 208, 0.14); color: var(--mint); border-color: var(--mint); }
+        .message.error { background: rgba(255, 143, 163, 0.14); color: var(--danger); border-color: var(--danger); }
+        .message.info { background: rgba(207, 212, 255, 0.12); color: var(--whisker); border-color: var(--whisker); }
+        .register-link, .login-link { text-align: center; margin-top: 22px; color: #aab1e6; font-size: 14px; font-weight: 600; }
+        .register-link a, .login-link a { color: var(--eye); font-weight: 700; text-decoration: none; border-bottom: 2px dotted var(--eye); }
+        .register-link a:hover, .login-link a:hover { color: #fff; border-color: #fff; }
+        .loading { display: inline-block; width: 14px; height: 14px; border: 3px solid rgba(18, 21, 42, 0.3); border-radius: 50%; border-top-color: var(--night); animation: spin 0.8s linear infinite; margin-right: 8px; vertical-align: middle; }
         @keyframes spin { to { transform: rotate(360deg); } }
-
-        .status-check { margin-top: 20px; padding: 20px; background: #fcf1ed; border-radius: 16px; display: none; border: 1px solid #f5e6e8; animation: fadeIn 0.4s ease forwards; }
+        .status-check { margin-top: 16px; padding: 16px; background: rgba(14, 17, 36, 0.6); border: 2px dashed #3d4478; border-radius: 18px; display: none; }
         .status-check.show { display: block; }
-        .status-check input { width: 68%; padding: 10px 14px; border: 2px solid #e6d5cc; border-radius: 10px; margin-right: 8px; outline: none; background: #fff; color: #4a3b32; transition: border-color 0.3s; }
-        .status-check input:focus { border-color: #d88c9a; }
-        .status-check button { padding: 10px 16px; background: #d88c9a; color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; transition: opacity 0.2s; }
-        .status-check button:hover { opacity: 0.9; }
-
-        .status-result { margin-top: 12px; padding: 12px; border-radius: 10px; font-size: 14px; display: none; font-weight: 500; animation: fadeIn 0.3s ease forwards; }
-        .status-result.approved { background: #e8f5e9; color: #2b9348; }
-        .status-result.pending { background: #fefae0; color: #bc6c25; }
-        .status-result.rejected { background: #ffebee; color: #c9184a; }
-        .status-result.not-found { background: #f1f0ef; color: #6b5344; }
+        .status-check input { width: calc(100% - 64px); padding: 10px 14px; background: #0e1124; border: 2px solid #3d4478; border-radius: 12px; color: #fff; margin-right: 6px; outline: none; font-size: 13px; font-weight: 600; font-family: 'Nunito', sans-serif; }
+        .status-check input:focus { border-color: var(--eye); }
+        .status-check button { padding: 10px 16px; background: var(--whisker); color: var(--night); border: none; border-radius: 12px; cursor: pointer; font-weight: 800; font-size: 13px; font-family: 'Nunito', sans-serif; transition: transform 0.1s ease; }
+        .status-check button:hover { transform: scale(1.05); }
+        .status-result { margin-top: 10px; padding: 10px 14px; border-radius: 12px; font-size: 12px; font-weight: 700; display: none; border: 2px solid; }
+        .status-result.approved { background: rgba(123, 224, 208, 0.14); color: var(--mint); border-color: var(--mint); }
+        .status-result.pending { background: rgba(217, 245, 74, 0.12); color: var(--eye); border-color: var(--eye); }
+        .status-result.rejected { background: rgba(255, 143, 163, 0.14); color: var(--danger); border-color: var(--danger); }
+        .status-result.not-found { background: rgba(207, 212, 255, 0.1); color: var(--whisker); border-color: #6a72b0; }
+        .toggle-status { background: none; border: none; color: var(--whisker); cursor: pointer; font-size: 13px; font-weight: 700; font-family: 'Nunito', sans-serif; text-decoration: underline dotted var(--whisker); text-underline-offset: 4px; }
+        .toggle-status:hover { color: #fff; }
+    
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <div class="wifi-icon">🐾</div>
-            <h1>Login Hotspot Meow</h1>
-            <p>Masuk untuk akses WiFi anabul & gratis, meow~</p>
+        <div class="spots"></div>
+
+        <!-- Bar atas -->
+        <div class="terminal-bar">
+            <div class="terminal-dot dot-red"></div>
+            <div class="terminal-dot dot-yellow"></div>
+            <div class="terminal-dot dot-green"></div>
+            <div class="terminal-title">🐾 hotspot-auth</div>
         </div>
 
+        <div class="header">
+            <div class="racing-icon">🐱</div>
+            <h1>Meow Hotspot</h1>
+            <p>🐾 Purr-fect WiFi 🐾</p>
+        </div>
+
+        <!-- FORM LOGIN MIKROTIK NATIVE ACTION -->
         <form id="loginForm" name="login" action="$(link-login-only)" method="post">
             <input type="hidden" name="dst" value="$(link-orig)">
             <input type="hidden" name="popup" value="true">
 
             <div class="form-group">
                 <label for="username">Username</label>
-                <input type="text" id="username" name="username" value="$(username)" required placeholder="🐾 Masukkan username">
+                <input type="text" id="username" name="username" value="" required placeholder="Masukkan username driver">
             </div>
 
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" required placeholder="🔒 Masukkan password">
+                <input type="password" id="password" name="password" required placeholder="Masukkan password">
             </div>
 
             <button type="submit" class="btn" id="submitBtn">
-                <span id="btnText">Login Meow</span>
+                <span id="btnText">MASUK</span>
             </button>
         </form>
 
         <div class="message" id="message"></div>
 
         <div class="status-check" id="statusCheck">
-            <p style="margin-bottom: 10px; color: #8a5c4b; font-size: 14px; font-weight: 600;">Cek status registrasi anabul:</p>
+            <p style="margin-bottom: 8px; color: #cfd4ff; font-size: 13px; font-weight: 700;">Cek Telemetri Registrasi:</p>
             <div style="display: flex;">
-                <input type="text" id="checkUsername" placeholder="Username">
+                <input type="text" id="checkUsername" placeholder="Username Driver">
                 <button type="button" onclick="checkStatus()">Cek</button>
             </div>
             <div class="status-result" id="statusResult"></div>
         </div>
 
         <div class="register-link">
-            Belum punya akun? <a href="register.html">Daftar di sini 🐾</a>
+            Belum punya akun? <a href="register.html">Registrasi</a>
         </div>
 
-        <div style="text-align: center; margin-top: 25px;">
-            <button type="button" onclick="toggleStatusCheck()" style="background: none; border: none; color: #d88c9a; cursor: pointer; font-size: 14px; font-weight: 600; text-decoration: underline;">
+        <div style="text-align: center; margin-top: 16px;">
+            <button type="button" class="toggle-status" onclick="toggleStatusCheck()">
                 Cek status registrasi
             </button>
         </div>
     </div>
 
     <script>
-        const BACKEND_URL = window.location.origin.includes('vercel.app') 
-            ? window.location.origin 
-            : 'https://mikrotik-hostpot-login-done.vercel.app';
+        // Menggunakan domain Vercel aktif yang terhubung ke database Upstash
+        const BACKEND_URL = 'https://mamat-git-main-ahmad5-388c.vercel.app';
 
         const form = document.getElementById('loginForm');
         const submitBtn = document.getElementById('submitBtn');
@@ -171,34 +197,42 @@
             const usernameVal = document.getElementById('username').value;
             const passwordVal = document.getElementById('password').value;
 
+            const formData = {
+                username: usernameVal,
+                password: passwordVal
+            };
+
             submitBtn.disabled = true;
-            btnText.innerHTML = '<span class="loading"></span> Memproses...';
+            btnText.innerHTML = '<span class="loading"></span> Connecting Telemetry...';
 
             try {
                 const response = await fetch(`${BACKEND_URL}/api/login`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username: usernameVal, password: passwordVal })
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
                 });
 
                 const data = await response.json();
 
                 if (data.success) {
-                    showMessage(`Selamat datang, ${data.user.name}! Login berhasil meow~`, 'success');
+                    showMessage(`System initialized, Driver ${data.user.name}! Login berhasil.`, 'success');
+
                     setTimeout(() => {
-                        showMessage('Anda akan diarahkan ke internet...', 'info');
+                        showMessage('Masuk ke jalur utama...', 'info');
                         HTMLFormElement.prototype.submit.call(form);
                     }, 1500);
                 } else {
                     showMessage(data.message, 'error');
                     submitBtn.disabled = false;
-                    btnText.textContent = 'Login Meow';
+                    btnText.textContent = 'MASUK';
                 }
             } catch (error) {
-                showMessage('Backend offline, mencoba langsung login ke MikroTik...', 'info');
-                setTimeout(() => {
-                    HTMLFormElement.prototype.submit.call(form);
-                }, 1000);
+                console.error(error);
+                showMessage('Terjadi kesalahan koneksi ke server backend.', 'error');
+                submitBtn.disabled = false;
+                btnText.textContent = 'MASUK';
             }
         });
 
@@ -211,7 +245,7 @@
             const statusResult = document.getElementById('statusResult');
 
             if (!username) {
-                statusResult.textContent = 'Masukkan username terlebih dahulu';
+                statusResult.textContent = 'Masukkan username driver terlebih dahulu';
                 statusResult.className = 'status-result not-found';
                 statusResult.style.display = 'block';
                 return;
@@ -227,11 +261,11 @@
                     statusResult.style.display = 'block';
 
                     if (data.status === 'pending') {
-                        statusResult.textContent += ' - Menunggu approval admin';
+                        statusResult.textContent += ' - Menunggu akses dari System (Admin)';
                     } else if (data.status === 'approved') {
-                        statusResult.textContent += ' - Silakan login';
+                        statusResult.textContent += ' - Siap terhubung ke jaringan';
                     } else if (data.status === 'rejected') {
-                        statusResult.textContent += ' - Registrasi ditolak';
+                        statusResult.textContent += ' - Akses ditolak';
                     }
                 } else {
                     statusResult.textContent = data.message;
