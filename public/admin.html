@@ -45,6 +45,7 @@
         }
         .spots::before { left: 26px; transform: rotate(-14deg); }
         .spots::after { right: 26px; transform: rotate(14deg); }
+
         .mono { font-family: 'Nunito', sans-serif; font-weight: 700; }
         .brand { font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 32px; line-height: 1.1; color: #fff; text-shadow: 0 0 18px rgba(207, 212, 255, 0.4); }
         .tagline { display: inline-block; margin-top: 10px; padding: 3px 14px; border-radius: 999px; border: 2px solid var(--eye); color: var(--eye); font-size: 12px; font-weight: 700; }
@@ -54,7 +55,10 @@
             background: linear-gradient(180deg, #e6ff6a 0%, var(--eye) 50%, #b8e02a 100%);
             color: var(--night); font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 15px; letter-spacing: 0.04em;
             cursor: pointer; box-shadow: 0 4px 0 #7d9412, 0 8px 18px rgba(217, 245, 74, 0.2);
+            transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.2s ease;
         }
+        .btn-refresh:hover { filter: brightness(1.06); }
+        .btn-refresh:active { transform: translateY(3px); box-shadow: 0 1px 0 #7d9412; }
         .metric { padding: 18px 20px; border-radius: 22px; background: linear-gradient(170deg, var(--fur) 0%, var(--fur2) 100%); border: 3px solid var(--edge); box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4); }
         .metric .label { font-size: 13px; font-weight: 700; color: var(--whisker); }
         .metric .num { margin-top: 6px; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 46px; line-height: 1; }
@@ -65,30 +69,37 @@
         .metric.approved .num { color: var(--mint); }
         .metric.rejected { border-color: var(--danger); }
         .metric.rejected .num { color: var(--danger); }
-        .panel { position: relative; padding: 30px 24px 22px; border-radius: 30px; background: linear-gradient(170deg, var(--fur) 0%, var(--fur2) 100%); border: 3px solid var(--edge); box-shadow: 0 25px 50px rgba(0, 0, 0, 0.55); }
+        .panel { position: relative; padding: 30px 24px 22px; border-radius: 30px; background: linear-gradient(170deg, var(--fur) 0%, var(--fur2) 100%); border: 3px solid var(--edge); box-shadow: 0 25px 50px rgba(0, 0, 0, 0.55), 0 0 40px rgba(217, 245, 74, 0.06); }
         .panel h2 { display: inline-block; margin-bottom: 16px; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 22px; color: #fff; }
         thead tr { border-bottom: 2px dashed var(--edge) !important; }
         thead th { color: var(--whisker) !important; font-size: 13px; font-weight: 700; }
+        #userTableBody { font-size: 13px; }
         .row { border-bottom: 1px solid #343a6b; transition: background 0.15s ease; }
         .row:hover { background: rgba(207, 212, 255, 0.07); }
         .cell-name { color: #fff; font-weight: 800; }
         .cell-user { color: var(--eye); font-weight: 700; }
         .cell-contact { color: var(--whisker); }
         .cell-date { color: #8f97cf; }
+        .cell-traffic { color: var(--mint); font-family: monospace; font-size: 11px; }
         .msg-empty { color: #8f97cf; }
         .msg-error { color: var(--danger); font-weight: 700; }
         .badge { display: inline-block; padding: 3px 12px; border-radius: 999px; border: 2px solid; font-size: 12px; font-weight: 800; }
         .badge-ok { background: rgba(123, 224, 208, 0.15); color: var(--mint); border-color: var(--mint); }
         .badge-no { background: rgba(255, 143, 163, 0.15); color: var(--danger); border-color: var(--danger); }
         .badge-wait { background: rgba(217, 245, 74, 0.13); color: var(--eye); border-color: var(--eye); }
-        .act { padding: 6px 14px; border: none; border-radius: 12px; font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 800; cursor: pointer; box-shadow: 0 3px 0 rgba(0, 0, 0, 0.45); }
+        .act { padding: 6px 14px; border: none; border-radius: 12px; font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 800; cursor: pointer; box-shadow: 0 3px 0 rgba(0, 0, 0, 0.45); transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.2s ease; }
+        .act:hover { filter: brightness(1.1); }
+        .act:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(0, 0, 0, 0.45); }
         .act-approve { background: var(--mint); color: #0b3a34; }
         .act-reject { background: var(--nose); color: #4a0f24; }
         .act-drop { background: var(--fur); color: var(--whisker); box-shadow: 0 0 0 2px var(--edge), 0 3px 0 rgba(0, 0, 0, 0.45); }
+        .act-drop:hover { background: #5a1f3a; color: #fff; }
     </style>
 </head>
 <body class="p-6">
     <div class="max-w-7xl mx-auto space-y-8">
+
+        <!-- Header -->
         <div class="flex justify-between items-center head-line pb-5">
             <div>
                 <h1 class="brand flex items-center gap-3">
@@ -97,17 +108,36 @@
                 </h1>
                 <p class="tagline">📡 RouterOS Interface: wlan1-hotspot</p>
             </div>
-            <button onclick="loadUsers()" class="btn-refresh flex items-center gap-2">🔄 REFRESH DATA</button>
+            <button onclick="loadUsers()" class="btn-refresh flex items-center gap-2">
+                🔄 REFRESH DATA
+            </button>
         </div>
+
+        <!-- Metric Cards -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
-            <div class="metric total"><div class="label">Total Registrations</div><div class="num" id="totalCount">0</div></div>
-            <div class="metric pending"><div class="label">Pending Approval</div><div class="num" id="pendingCount">0</div></div>
-            <div class="metric approved"><div class="label">Approved / Active</div><div class="num" id="approvedCount">0</div></div>
-            <div class="metric rejected"><div class="label">Blocked / Rejected</div><div class="num" id="rejectedCount">0</div></div>
+            <div class="metric total">
+                <div class="label">Total Registrations</div>
+                <div class="num" id="totalCount">0</div>
+            </div>
+            <div class="metric pending">
+                <div class="label">Pending Approval</div>
+                <div class="num" id="pendingCount">0</div>
+            </div>
+            <div class="metric approved">
+                <div class="label">Approved / Active</div>
+                <div class="num" id="approvedCount">0</div>
+            </div>
+            <div class="metric rejected">
+                <div class="label">Blocked / Rejected</div>
+                <div class="num" id="rejectedCount">0</div>
+            </div>
         </div>
+
+        <!-- Table Section -->
         <div class="panel">
             <div class="spots"></div>
-            <h2>🐾 Subscriber Active Session Table 🐾</h2>
+            <h2>🐾 Subscriber Active Session & Live Traffic Table 🐾</h2>
+
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
@@ -115,19 +145,32 @@
                             <th class="p-3">USER & CREDENTIALS</th>
                             <th class="p-3">CONTACT</th>
                             <th class="p-3">STATUS</th>
+                            <th class="p-3">LIVE TRAFFIC (IN / OUT) & UPTIME</th>
                             <th class="p-3">DATE REGISTERED</th>
                             <th class="p-3 text-right">ACTIONS</th>
                         </tr>
                     </thead>
                     <tbody id="userTableBody" class="text-xs mono">
-                        <tr><td colspan="5" class="p-4 text-center msg-empty">Memuat data dari Upstash Redis...</td></tr>
+                        <tr>
+                            <td colspan="6" class="p-4 text-center msg-empty">Memuat data dari Upstash Redis & MikroTik...</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+
     <script>
-        const BACKEND_URL = '';
+        const BACKEND_URL = 'https://dinda-cyntia.vercel.app';
+
+        // Fungsi helper untuk mengubah bytes menjadi format yang mudah dibaca (KB, MB, GB)
+        function formatBytes(bytes) {
+            if (!bytes || bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
 
         async function loadUsers() {
             const tableBody = document.getElementById('userTableBody');
@@ -136,39 +179,62 @@
                 const data = await response.json();
 
                 if (!data.success || !data.users) {
-                    tableBody.innerHTML = `<tr><td colspan="5" class="p-4 text-center msg-error">Gagal mengambil data pengguna.</td></tr>`;
+                    tableBody.innerHTML = `<tr><td colspan="6" class="p-4 text-center msg-error">Gagal mengambil data pengguna.</td></tr>`;
                     return;
                 }
 
                 const users = data.users;
+
+                // Update Counter
                 document.getElementById('totalCount').textContent = users.length;
                 document.getElementById('pendingCount').textContent = users.filter(u => u.status === 'pending').length;
                 document.getElementById('approvedCount').textContent = users.filter(u => u.status === 'approved').length;
                 document.getElementById('rejectedCount').textContent = users.filter(u => u.status === 'rejected').length;
 
                 if (users.length === 0) {
-                    tableBody.innerHTML = `<tr><td colspan="5" class="p-4 text-center msg-empty">Belum ada user mendaftar.</td></tr>`;
+                    tableBody.innerHTML = `<tr><td colspan="6" class="p-4 text-center msg-empty">Belum ada user mendaftar.</td></tr>`;
                     return;
                 }
 
+                // Render Data Table dengan Statistik Live Trafik MikroTik
                 tableBody.innerHTML = users.map(user => {
-                    let statusBadge = user.status === 'approved' ? `<span class="badge badge-ok">ACCEPTED</span>` :
-                                      user.status === 'rejected' ? `<span class="badge badge-no">REJECTED</span>` :
-                                      `<span class="badge badge-wait">PENDING</span>`;
+                    let statusBadge = '';
+                    if (user.status === 'approved') {
+                        statusBadge = `<span class="badge badge-ok">ACCEPTED</span>`;
+                    } else if (user.status === 'rejected') {
+                        statusBadge = `<span class="badge badge-no">REJECTED</span>`;
+                    } else {
+                        statusBadge = `<span class="badge badge-wait">PENDING</span>`;
+                    }
 
                     const dateStr = user.createdAt ? new Date(user.createdAt).toLocaleString('id-ID') : '-';
+                    
+                    // Menampilkan data statistik trafik jika user aktif / approved
+                    let trafficInfo = `<span class="text-slate-500">Offline / Belum Aktif</span>`;
+                    if (user.status === 'approved') {
+                        const bytesIn = formatBytes(user.stats ? user.stats['bytes-in'] : 0);
+                        const bytesOut = formatBytes(user.stats ? user.stats['bytes-out'] : 0);
+                        const uptime = user.stats ? user.stats.uptime : 'Off';
+                        trafficInfo = `
+                            <div>📥 In: ${bytesIn}</div>
+                            <div>📤 Out: ${bytesOut}</div>
+                            <div>⏱️ Uptime: ${uptime}</div>
+                        `;
+                    }
 
                     return `
                         <tr class="row">
                             <td class="p-3">
                                 <div class="cell-name">${user.name || '-'}</div>
                                 <div class="cell-user">user: ${user.username}</div>
+                                <div class="text-slate-400 text-[11px]">pass: ${user.password || '******'}</div>
                             </td>
                             <td class="p-3 cell-contact">
                                 <div>${user.email || '-'}</div>
                                 <div>${user.phone || '-'}</div>
                             </td>
                             <td class="p-3">${statusBadge}</td>
+                            <td class="p-3 cell-traffic">${trafficInfo}</td>
                             <td class="p-3 cell-date">${dateStr}</td>
                             <td class="p-3 text-right space-x-2">
                                 ${user.status === 'pending' ? `
@@ -180,9 +246,10 @@
                         </tr>
                     `;
                 }).join('');
+
             } catch (err) {
                 console.error(err);
-                tableBody.innerHTML = `<tr><td colspan="5" class="p-4 text-center msg-error">Terjadi kesalahan koneksi ke API.</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="6" class="p-4 text-center msg-error">Terjadi kesalahan koneksi ke API.</td></tr>`;
             }
         }
 
@@ -197,11 +264,13 @@
                 const result = await res.json();
                 alert(result.message);
                 loadUsers();
-            } catch (e) { alert('Gagal menyetujui user'); }
+            } catch (e) {
+                alert('Gagal menyetujui user');
+            }
         }
 
         async function rejectUser(username) {
-            if (!confirm(`Tolak pendaftaran ${username}?`)) return;
+            if (!confirm(`Tolak pendaftaran ${username}?`))Nunito
             try {
                 const res = await fetch(`${BACKEND_URL}/api/reject`, {
                     method: 'POST',
@@ -211,7 +280,9 @@
                 const result = await res.json();
                 alert(result.message);
                 loadUsers();
-            } catch (e) { alert('Gagal menolak user'); }
+            } catch (e) {
+                alert('Gagal menolak user');
+            }
         }
 
         async function deleteUser(username) {
@@ -221,10 +292,16 @@
                 const result = await res.json();
                 alert(result.message);
                 loadUsers();
-            } catch (e) { alert('Gagal menghapus user'); }
+            } catch (e) {
+                alert('Gagal menghapus user');
+            }
         }
 
-        document.addEventListener('DOMContentLoaded', loadUsers);
+        // Jalankan otomatis saat halaman dimuat dan refresh setiap 10 detik untuk statistik real-time
+        document.addEventListener('DOMContentLoaded', () => {
+            loadUsers();
+            setInterval(loadUsers, 10000); // Auto-refresh data & trafik tiap 10 detik
+        });
     </script>
 </body>
 </html>
