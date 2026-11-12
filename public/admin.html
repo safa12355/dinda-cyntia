@@ -3,732 +3,278 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Hotspot Meow 🐾</title>
+    <title>Meow Hotspot Gateway - Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        :root {
+            --night: #12152a;
+            --fur: #2a2f5c;
+            --fur2: #1b1f3d;
+            --edge: #4b5290;
+            --whisker: #cfd4ff;
+            --nose: #ff9bb3;
+            --eye: #d9f54a;
+            --mint: #7be0d0;
+            --danger: #ff8fa3;
         }
-
-        @keyframes pulseIcon {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.08); }
-            100% { transform: scale(1); }
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #fceade 0%, #fbc5d4 100%);
             min-height: 100vh;
-            padding: 20px;
-            color: #4a3b32;
+            color: #fff;
+            font-family: 'Nunito', sans-serif;
+            background-color: var(--night);
+            background-image:
+                radial-gradient(circle at 15% 10%, rgba(120, 100, 255, 0.28), transparent 42%),
+                radial-gradient(circle at 88% 90%, rgba(123, 224, 208, 0.16), transparent 42%),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 150 150'%3E%3Cg fill='%23ffffff' fill-opacity='.055'%3E%3Cg transform='translate(36 44) rotate(-20)'%3E%3Cellipse cx='0' cy='7' rx='10' ry='8.5'/%3E%3Cellipse cx='-12' cy='-6' rx='3.8' ry='5'/%3E%3Cellipse cx='-4.5' cy='-13' rx='3.8' ry='5.2'/%3E%3Cellipse cx='4.5' cy='-13' rx='3.8' ry='5.2'/%3E%3Cellipse cx='12' cy='-6' rx='3.8' ry='5'/%3E%3C/g%3E%3Cg transform='translate(108 110) rotate(24)'%3E%3Cellipse cx='0' cy='7' rx='10' ry='8.5'/%3E%3Cellipse cx='-12' cy='-6' rx='3.8' ry='5'/%3E%3Cellipse cx='-4.5' cy='-13' rx='3.8' ry='5.2'/%3E%3Cellipse cx='4.5' cy='-13' rx='3.8' ry='5.2'/%3E%3Cellipse cx='12' cy='-6' rx='3.8' ry='5'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            background-size: auto, auto, 150px 150px;
+            background-attachment: fixed;
         }
+        /* Telinga kucing di atas kartu */
+        .spots {
+            position: absolute; top: 0; left: 0; right: 0; height: 0;
+            pointer-events: none;
+            filter: drop-shadow(2px 0 0 var(--edge)) drop-shadow(-2px 0 0 var(--edge)) drop-shadow(0 -2px 0 var(--edge));
+        }
+        .spots::before, .spots::after {
+            content: ""; position: absolute; bottom: -3px;
+            width: 58px; height: 58px;
+            clip-path: polygon(0 100%, 50% 0, 100% 100%);
+            background: radial-gradient(ellipse 26% 42% at 50% 88%, var(--nose) 97%, transparent 100%), var(--fur);
+            transform-origin: 50% 100%;
+        }
+        .spots::before { left: 26px; transform: rotate(-14deg); }
+        .spots::after { right: 26px; transform: rotate(14deg); }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        .mono { font-family: 'Nunito', sans-serif; font-weight: 700; }
+        .brand { font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 32px; line-height: 1.1; color: #fff; text-shadow: 0 0 18px rgba(207, 212, 255, 0.4); }
+        .tagline { display: inline-block; margin-top: 10px; padding: 3px 14px; border-radius: 999px; border: 2px solid var(--eye); color: var(--eye); font-size: 12px; font-weight: 700; }
+        .head-line { border-bottom: 2px dashed var(--edge); }
+        .btn-refresh {
+            padding: 10px 20px; border: none; border-radius: 14px;
+            background: linear-gradient(180deg, #e6ff6a 0%, var(--eye) 50%, #b8e02a 100%);
+            color: var(--night); font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 15px; letter-spacing: 0.04em;
+            cursor: pointer; box-shadow: 0 4px 0 #7d9412, 0 8px 18px rgba(217, 245, 74, 0.2);
+            transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.2s ease;
         }
-
-        /* Login Modal */
-        .login-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(74, 59, 50, 0.6);
-            backdrop-filter: blur(6px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            animation: fadeIn 0.4s ease forwards;
-        }
-
-        .login-box {
-            background: #fffaf7;
-            padding: 40px;
-            border-radius: 24px;
-            max-width: 400px;
-            width: 90%;
-            text-align: center;
-            box-shadow: 0 15px 35px rgba(138, 92, 75, 0.15);
-            border: 3px dashed #f2b8c6;
-            animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        .login-box h2 {
-            color: #5c4033;
-            margin-bottom: 20px;
-            font-size: 24px;
-        }
-
-        .login-box input {
-            width: 100%;
-            padding: 12px 16px;
-            margin-bottom: 15px;
-            border: 2px solid #e6d5cc;
-            border-radius: 12px;
-            font-size: 14px;
-            background: #fff;
-            color: #4a3b32;
-            outline: none;
-            transition: all 0.3s ease;
-        }
-
-        .login-box input:focus {
-            border-color: #d88c9a;
-            box-shadow: 0 0 0 4px rgba(216, 140, 154, 0.15);
-        }
-
-        .login-box button {
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(135deg, #d88c9a 0%, #f2b8c6 100%);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(216, 140, 154, 0.4);
-            transition: all 0.3s ease;
-        }
-
-        .login-box button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(216, 140, 154, 0.6);
-            opacity: 0.95;
-        }
-
-        /* Admin Dashboard */
-        .dashboard {
-            display: none;
-        }
-
-        .header {
-            background: #fffaf7;
-            padding: 20px 30px;
-            border-radius: 20px;
-            margin-bottom: 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 10px 30px rgba(138, 92, 75, 0.08);
-            border: 2px solid #fceade;
-            transition: transform 0.3s ease;
-        }
-
-        .header:hover {
-            transform: translateY(-2px);
-        }
-
-        .header h1 {
-            color: #5c4033;
-            font-size: 24px;
-        }
-
-        .header .admin-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .admin-info span {
-            font-weight: 600;
-            color: #8a5c4b;
-        }
-
-        .logout-btn {
-            padding: 10px 20px;
-            background: #e07a5f;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .logout-btn:hover {
-            transform: translateY(-2px);
-            background: #cc6a50;
-        }
-
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .stat-card {
-            background: #fffaf7;
-            padding: 25px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(138, 92, 75, 0.08);
-            border: 2px solid #fceade;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(138, 92, 75, 0.12);
-            border-color: #f2b8c6;
-        }
-
-        .stat-card::after {
-            content: '🐾';
-            position: absolute;
-            right: 15px;
-            bottom: 15px;
-            font-size: 32px;
-            opacity: 0.15;
-            transition: transform 0.3s ease;
-        }
-
-        .stat-card:hover::after {
-            transform: scale(1.2) rotate(10deg);
-            opacity: 0.3;
-        }
-
-        .stat-card h3 {
-            color: #8a5c4b;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-
-        .stat-card .number {
-            color: #5c4033;
-            font-size: 32px;
-            font-weight: 700;
-        }
-
-        .users-section {
-            background: #fffaf7;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(138, 92, 75, 0.08);
-            border: 2px solid #fceade;
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .section-header h2 {
-            color: #5c4033;
-            font-size: 20px;
-        }
-
-        .refresh-btn {
-            padding: 10px 20px;
-            background: #d88c9a;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .refresh-btn:hover {
-            transform: translateY(-2px);
-            opacity: 0.9;
-        }
-
-        .table-container {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #f5e6e8;
-        }
-
-        th {
-            background: #fcf1ed;
-            color: #5c4033;
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        td {
-            color: #6b5344;
-            font-size: 14px;
-            transition: background 0.2s ease;
-        }
-
-        tbody tr {
-            transition: background 0.2s ease;
-        }
-
-        tbody tr:hover td {
-            background: #fff5f2;
-        }
-
-        .status {
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            display: inline-block;
-        }
-
-        .status.pending {
-            background: #fefae0;
-            color: #bc6c25;
-        }
-
-        .status.approved {
-            background: #e8f5e9;
-            color: #2b9348;
-        }
-
-        .status.rejected {
-            background: #ffebee;
-            color: #c9184a;
-        }
-
-        .traffic-info {
-            font-size: 12px;
-            color: #7f6353;
-            line-height: 1.4;
-        }
-
-        .traffic-info span {
-            font-weight: 600;
-            color: #4a3b32;
-        }
-
-        .actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .action-btn {
-            padding: 8px 14px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 600;
-            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .action-btn:hover {
-            transform: translateY(-2px);
-            filter: brightness(1.1);
-        }
-
-        .approve-btn {
-            background: #52b788;
-            color: white;
-        }
-
-        .reject-btn {
-            background: #e63946;
-            color: white;
-        }
-
-        .delete-btn {
-            background: #adb5bd;
-            color: white;
-        }
-
-        .action-btn:disabled {
-            background: #e0d5ce;
-            color: #a3968e;
-            cursor: not-allowed;
-            transform: none;
-            filter: none;
-        }
-
-        .message {
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            display: none;
-            font-weight: 500;
-            animation: fadeIn 0.3s ease forwards;
-        }
-
-        .message.success {
-            background: #e8f5e9;
-            color: #2b9348;
-            border: 1px solid #c7e9c0;
-        }
-
-        .message.error {
-            background: #ffebee;
-            color: #c9184a;
-            border: 1px solid #ffcdd2;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #8a5c4b;
-            font-weight: 500;
-        }
-
-        .loading::after {
-            content: '';
-            display: inline-block;
-            width: 24px;
-            height: 24px;
-            border: 3px solid #d88c9a;
-            border-radius: 50%;
-            border-top-color: transparent;
-            animation: spin 1s linear infinite;
-            margin-left: 10px;
-            vertical-align: middle;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            color: #bfa59a;
-        }
-
-        .empty-state svg {
-            width: 70px;
-            height: 70px;
-            margin-bottom: 15px;
-            opacity: 0.5;
-            stroke: #bfa59a;
-            animation: pulseIcon 2s infinite ease-in-out;
-        }
+        .btn-refresh:hover { filter: brightness(1.06); }
+        .btn-refresh:active { transform: translateY(3px); box-shadow: 0 1px 0 #7d9412; }
+        .metric { padding: 18px 20px; border-radius: 22px; background: linear-gradient(170deg, var(--fur) 0%, var(--fur2) 100%); border: 3px solid var(--edge); box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4); }
+        .metric .label { font-size: 13px; font-weight: 700; color: var(--whisker); }
+        .metric .num { margin-top: 6px; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 46px; line-height: 1; }
+        .metric.total .num { color: #fff; }
+        .metric.pending { border-color: var(--eye); }
+        .metric.pending .num { color: var(--eye); }
+        .metric.approved { border-color: var(--mint); }
+        .metric.approved .num { color: var(--mint); }
+        .metric.rejected { border-color: var(--danger); }
+        .metric.rejected .num { color: var(--danger); }
+        .panel { position: relative; padding: 30px 24px 22px; border-radius: 30px; background: linear-gradient(170deg, var(--fur) 0%, var(--fur2) 100%); border: 3px solid var(--edge); box-shadow: 0 25px 50px rgba(0, 0, 0, 0.55), 0 0 40px rgba(217, 245, 74, 0.06); }
+        .panel h2 { display: inline-block; margin-bottom: 16px; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 22px; color: #fff; }
+        thead tr { border-bottom: 2px dashed var(--edge) !important; }
+        thead th { color: var(--whisker) !important; font-size: 13px; font-weight: 700; }
+        #userTableBody { font-size: 13px; }
+        .row { border-bottom: 1px solid #343a6b; transition: background 0.15s ease; }
+        .row:hover { background: rgba(207, 212, 255, 0.07); }
+        .cell-name { color: #fff; font-weight: 800; }
+        .cell-user { color: var(--eye); font-weight: 700; }
+        .cell-contact { color: var(--whisker); }
+        .cell-date { color: #8f97cf; }
+        .msg-empty { color: #8f97cf; }
+        .msg-error { color: var(--danger); font-weight: 700; }
+        .badge { display: inline-block; padding: 3px 12px; border-radius: 999px; border: 2px solid; font-size: 12px; font-weight: 800; }
+        .badge-ok { background: rgba(123, 224, 208, 0.15); color: var(--mint); border-color: var(--mint); }
+        .badge-no { background: rgba(255, 143, 163, 0.15); color: var(--danger); border-color: var(--danger); }
+        .badge-wait { background: rgba(217, 245, 74, 0.13); color: var(--eye); border-color: var(--eye); }
+        .act { padding: 6px 14px; border: none; border-radius: 12px; font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 800; cursor: pointer; box-shadow: 0 3px 0 rgba(0, 0, 0, 0.45); transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.2s ease; }
+        .act:hover { filter: brightness(1.1); }
+        .act:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(0, 0, 0, 0.45); }
+        .act-approve { background: var(--mint); color: #0b3a34; }
+        .act-reject { background: var(--nose); color: #4a0f24; }
+        .act-drop { background: var(--fur); color: var(--whisker); box-shadow: 0 0 0 2px var(--edge), 0 3px 0 rgba(0, 0, 0, 0.45); }
+        .act-drop:hover { background: #5a1f3a; color: #fff; }
+        .btn-refresh:focus-visible, .act:focus-visible { outline: 3px solid var(--whisker); outline-offset: 3px; }
+    
     </style>
 </head>
-<body>
-    <!-- Login Modal -->
-    <div class="login-modal" id="loginModal">
-        <div class="login-box">
-            <h2>🐱 Meow Admin Login</h2>
-            <form id="loginForm">
-                <input type="password" id="adminPassword" placeholder="🐾 Masukkan password admin" required>
-                <button type="submit">Login Meow</button>
-            </form>
-            <div class="message" id="loginMessage"></div>
-        </div>
-    </div>
+<body class="p-6">
+    <div class="max-w-7xl mx-auto space-y-8">
 
-    <!-- Dashboard -->
-    <div class="container dashboard" id="dashboard">
-        <div class="header">
-            <h1>🐾 Admin Panel - Hotspot Meow</h1>
-            <div class="admin-info">
-                <span id="adminName">Admin</span>
-                <button class="logout-btn" onclick="logout()">Logout 🐾</button>
+        <!-- Header -->
+        <div class="flex justify-between items-center head-line pb-5">
+            <div>
+                <h1 class="brand flex items-center gap-3">
+                    <span class="w-4 h-4 rounded-full animate-pulse" style="background: var(--eye); box-shadow: 0 0 14px var(--eye);"></span>
+                    MEOW HOTSPOT ADMIN
+                </h1>
+                <p class="tagline">🐾 RouterOS Interface: wlan1-hotspot</p>
             </div>
+            <button onclick="loadUsers()" class="btn-refresh flex items-center gap-2">
+                🔄 REFRESH DATA
+            </button>
         </div>
 
-        <div class="stats">
-            <div class="stat-card">
-                <h3>Total Users</h3>
-                <div class="number" id="totalUsers">0</div>
+        <!-- Metric Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
+            <div class="metric total">
+                <div class="label">Total Registrations</div>
+                <div class="num" id="totalCount">0</div>
             </div>
-            <div class="stat-card">
-                <h3>Pending</h3>
-                <div class="number" id="pendingUsers">0</div>
+            <div class="metric pending">
+                <div class="label">Pending Approval</div>
+                <div class="num" id="pendingCount">0</div>
             </div>
-            <div class="stat-card">
-                <h3>Approved</h3>
-                <div class="number" id="approvedUsers">0</div>
+            <div class="metric approved">
+                <div class="label">Approved / Active</div>
+                <div class="num" id="approvedCount">0</div>
             </div>
-            <div class="stat-card">
-                <h3>Rejected</h3>
-                <div class="number" id="rejectedUsers">0</div>
+            <div class="metric rejected">
+                <div class="label">Blocked / Rejected</div>
+                <div class="num" id="rejectedCount">0</div>
             </div>
         </div>
 
-        <div class="users-section">
-            <div class="section-header">
-                <h2>Daftar Anabul (User)</h2>
-                <button class="refresh-btn" onclick="loadUsers()">🔄 Refresh</button>
-            </div>
+        <!-- Table Section -->
+        <div class="panel">
+            <div class="spots"></div>
+            <h2>🐾 Subscriber Active Session Table 🐾</h2>
 
-            <div class="message" id="message"></div>
-
-            <div class="table-container">
-                <table id="usersTable">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr>
-                            <th>Nama</th>
-                            <th>Email</th>
-                            <th>Username</th>
-                            <th>Status</th>
-                            <th>Tanggal</th>
-                            <th>Penggunaan Traffic</th>
-                            <th>Aksi</th>
+                        <tr class="border-b border-slate-800 text-xs text-slate-400 mono">
+                            <th class="p-3">USER & CREDENTIALS</th>
+                            <th class="p-3">CONTACT</th>
+                            <th class="p-3">STATUS</th>
+                            <th class="p-3">DATE REGISTERED</th>
+                            <th class="p-3 text-right">ACTIONS</th>
                         </tr>
                     </thead>
-                    <tbody id="usersTableBody">
+                    <tbody id="userTableBody" class="text-xs mono">
+                        <tr>
+                            <td colspan="5" class="p-4 text-center msg-empty">Memuat data dari Upstash Redis...</td>
+                        </tr>
                     </tbody>
                 </table>
-            </div>
-
-            <div class="empty-state" id="emptyState" style="display: none;">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="9" cy="7" r="4"></circle>
-                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                </svg>
-                <p>Belum ada user terdaftar, meow~</p>
-            </div>
-
-            <div class="loading" id="loading" style="display: none;">
-                <span style="vertical-align: middle;">Memuat data anabul...</span>
             </div>
         </div>
     </div>
 
     <script>
-        const BACKEND_URL = window.location.origin.includes('vercel.app') 
-            ? window.location.origin 
-            : 'https://nama-proyek-kamu.vercel.app';
-
-        let isAdminLoggedIn = false;
-        let adminName = 'Admin';
-
-        function formatBytes(bytes) {
-            if (!bytes || bytes == 0) return '0 B';
-            const k = 1024;
-            const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-        }
-
-        if (localStorage.getItem('adminLoggedIn') === 'true') {
-            isAdminLoggedIn = true;
-            adminName = localStorage.getItem('adminName') || 'Admin';
-            showDashboard();
-        }
-
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const password = document.getElementById('adminPassword').value;
-
-            try {
-                const response = await fetch(`${BACKEND_URL}/api/admin/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ password })
-                });
-
-                const data = await response.json();
-
-                if (data.success) {
-                    isAdminLoggedIn = true;
-                    localStorage.setItem('adminLoggedIn', 'true');
-                    localStorage.setItem('adminName', adminName);
-                    showDashboard();
-                } else {
-                    showLoginMessage(data.message, 'error');
-                }
-            } catch (error) {
-                showLoginMessage('Terjadi kesalahan. Silakan coba lagi.', 'error');
-            }
-        });
-
-        function showLoginMessage(text, type) {
-            const message = document.getElementById('loginMessage');
-            message.textContent = text;
-            message.className = `message ${type}`;
-            message.style.display = 'block';
-
-            setTimeout(() => {
-                message.style.display = 'none';
-            }, 3000);
-        }
-
-        function showDashboard() {
-            document.getElementById('loginModal').style.display = 'none';
-            document.getElementById('dashboard').style.display = 'block';
-            document.getElementById('adminName').textContent = adminName;
-            loadUsers();
-        }
-
-        function logout() {
-            isAdminLoggedIn = false;
-            localStorage.removeItem('adminLoggedIn');
-            localStorage.removeItem('adminName');
-            document.getElementById('loginModal').style.display = 'flex';
-            document.getElementById('dashboard').style.display = 'none';
-            document.getElementById('adminPassword').value = '';
-        }
-
         async function loadUsers() {
-            const loading = document.getElementById('loading');
-            const tableBody = document.getElementById('usersTableBody');
-            const emptyState = document.getElementById('emptyState');
-
-            loading.style.display = 'block';
-            tableBody.innerHTML = '';
-            emptyState.style.display = 'none';
-
+            const tableBody = document.getElementById('userTableBody');
             try {
-                const response = await fetch(`${BACKEND_URL}/api/users`);
+                const response = await fetch('/api/users');
                 const data = await response.json();
 
-                if (data.success) {
-                    const users = data.users;
-                    
-                    document.getElementById('totalUsers').textContent = users.length;
-                    document.getElementById('pendingUsers').textContent = users.filter(u => u.status === 'pending').length;
-                    document.getElementById('approvedUsers').textContent = users.filter(u => u.status === 'approved').length;
-                    document.getElementById('rejectedUsers').textContent = users.filter(u => u.status === 'rejected').length;
-
-                    if (users.length === 0) {
-                        emptyState.style.display = 'block';
-                    } else {
-                        users.forEach(user => {
-                            const bytesIn = formatBytes(user.bytesIn || 0);
-                            const bytesOut = formatBytes(user.bytesOut || 0);
-                            const uptime = user.uptime || 'Off';
-
-                            const row = document.createElement('tr');
-                            row.innerHTML = `
-                                <td>${user.name}</td>
-                                <td>${user.email}</td>
-                                <td>${user.username}</td>
-                                <td><span class="status ${user.status}">${user.status}</span></td>
-                                <td>${new Date(user.timestamp).toLocaleDateString('id-ID')}</td>
-                                <td>
-                                    <div class="traffic-info">
-                                        ⏱️ Uptime: <span>${uptime}</span><br>
-                                        ⬇️ Download: <span>${bytesOut}</span> | ⬆️ Upload: <span>${bytesIn}</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="actions">
-                                        <button class="action-btn approve-btn" 
-                                            onclick="approveUser('${user.username}')" 
-                                            ${user.status !== 'pending' ? 'disabled' : ''}>
-                                            ✓ Approve
-                                        </button>
-                                        <button class="action-btn reject-btn" 
-                                            onclick="rejectUser('${user.username}')"
-                                            ${user.status !== 'pending' ? 'disabled' : ''}>
-                                            ✗ Reject
-                                        </button>
-                                        <button class="action-btn delete-btn" 
-                                            onclick="deleteUser('${user.username}')">
-                                            🗑 Delete
-                                        </button>
-                                    </div>
-                                </td>
-                            `;
-                            tableBody.appendChild(row);
-                        });
-                    }
+                if (!data.success || !data.users) {
+                    tableBody.innerHTML = `<tr><td colspan="5" class="p-4 text-center msg-error">Gagal mengambil data pengguna.</td></tr>`;
+                    return;
                 }
-            } catch (error) {
-                showMessage('Gagal memuat data user', 'error');
-            } finally {
-                loading.style.display = 'none';
+
+                const users = data.users;
+
+                // Update Counter
+                document.getElementById('totalCount').textContent = users.length;
+                document.getElementById('pendingCount').textContent = users.filter(u => u.status === 'pending').length;
+                document.getElementById('approvedCount').textContent = users.filter(u => u.status === 'approved').length;
+                document.getElementById('rejectedCount').textContent = users.filter(u => u.status === 'rejected').length;
+
+                if (users.length === 0) {
+                    tableBody.innerHTML = `<tr><td colspan="5" class="p-4 text-center msg-empty">Belum ada user mendaftar.</td></tr>`;
+                    return;
+                }
+
+                // Render Data Table
+                tableBody.innerHTML = users.map(user => {
+                    let statusBadge = '';
+                    if (user.status === 'approved') {
+                        statusBadge = `<span class="badge badge-ok">ACCEPTED</span>`;
+                    } else if (user.status === 'rejected') {
+                        statusBadge = `<span class="badge badge-no">REJECTED</span>`;
+                    } else {
+                        statusBadge = `<span class="badge badge-wait">PENDING</span>`;
+                    }
+
+                    const dateStr = user.createdAt ? new Date(user.createdAt).toLocaleString('id-ID') : '-';
+
+                    return `
+                        <tr class="row">
+                            <td class="p-3">
+                                <div class="cell-name">${user.name || '-'}</div>
+                                <div class="cell-user">user: ${user.username}</div>
+                            </td>
+                            <td class="p-3 cell-contact">
+                                <div>${user.email || '-'}</div>
+                                <div>${user.phone || '-'}</div>
+                            </td>
+                            <td class="p-3">${statusBadge}</td>
+                            <td class="p-3 cell-date">${dateStr}</td>
+                            <td class="p-3 text-right space-x-2">
+                                ${user.status === 'pending' ? `
+                                    <button onclick="approveUser('${user.username}')" class="act act-approve">APPROVE</button>
+                                    <button onclick="rejectUser('${user.username}')" class="act act-reject">REJECT</button>
+                                ` : ''}
+                                <button onclick="deleteUser('${user.username}')" class="act act-drop">DROP</button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+
+            } catch (err) {
+                console.error(err);
+                tableBody.innerHTML = `<tr><td colspan="5" class="p-4 text-center msg-error">Terjadi kesalahan koneksi ke API.</td></tr>`;
             }
         }
 
         async function approveUser(username) {
-            if (!confirm(`Approve user ${username}?`)) return;
-
+            if (!confirm(`Setujui pendaftaran ${username}?`)) return;
             try {
-                const response = await fetch(`${BACKEND_URL}/api/approve`, {
+                const res = await fetch('/api/approve', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, adminName })
+                    body: JSON.stringify({ username, adminName: 'Admin' })
                 });
-
-                const data = await response.json();
-                if (data.success) {
-                    showMessage(`User ${username} berhasil diapprove`, 'success');
-                    loadUsers();
-                } else {
-                    showMessage(data.message, 'error');
-                }
-            } catch (error) {
-                showMessage('Gagal approve user', 'error');
+                const result = await res.json();
+                alert(result.message);
+                loadUsers();
+            } catch (e) {
+                alert('Gagal menyetujui user');
             }
         }
 
         async function rejectUser(username) {
-            if (!confirm(`Reject user ${username}?`)) return;
-
+            if (!confirm(`Tolak pendaftaran ${username}?`)) return;
             try {
-                const response = await fetch(`${BACKEND_URL}/api/reject`, {
+                const res = await fetch('/api/reject', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, adminName })
+                    body: JSON.stringify({ username, adminName: 'Admin' })
                 });
-
-                const data = await response.json();
-                if (data.success) {
-                    showMessage(`User ${username} berhasil direject`, 'success');
-                    loadUsers();
-                } else {
-                    showMessage(data.message, 'error');
-                }
-            } catch (error) {
-                showMessage('Gagal reject user', 'error');
+                const result = await res.json();
+                alert(result.message);
+                loadUsers();
+            } catch (e) {
+                alert('Gagal menolak user');
             }
         }
 
         async function deleteUser(username) {
-            if (!confirm(`Hapus user ${username}?`)) return;
-
+            if (!confirm(`Hapus permanen user ${username}?`)) return;
             try {
-                const response = await fetch(`${BACKEND_URL}/api/users/${username}`, { method: 'DELETE' });
-                const data = await response.json();
-                if (data.success) {
-                    showMessage(`User ${username} berhasil dihapus`, 'success');
-                    loadUsers();
-                } else {
-                    showMessage(data.message, 'error');
-                }
-            } catch (error) {
-                showMessage('Gagal menghapus user', 'error');
+                const res = await fetch(`/api/users/${username}`, { method: 'DELETE' });
+                const result = await res.json();
+                alert(result.message);
+                loadUsers();
+            } catch (e) {
+                alert('Gagal menghapus user');
             }
         }
 
-        function showMessage(text, type) {
-            const message = document.getElementById('message');
-            message.textContent = text;
-            message.className = `message ${type}`;
-            message.style.display = 'block';
-
-            setTimeout(() => {
-                message.style.display = 'none';
-            }, 3000);
-        }
-
-        setInterval(() => {
-            if (isAdminLoggedIn) loadUsers();
-        }, 30000);
+        // Jalankan saat halaman selesai dimuat
+        document.addEventListener('DOMContentLoaded', loadUsers);
     </script>
 </body>
 </html>
