@@ -3,168 +3,181 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hotspot Login - Moo Network</title>
+    <title>Hotspot Login - Hello Kitty Network</title>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --milk: #fcfaf5;
-            --milk-card: #f3efe6;
-            --spot: #242124;
-            --spot-soft: #4a454a;
-            --snout: #ff9eb5;
-            --snout-dark: #d96b86;
-            --grass: #7ed957;
-            --bell: #ffd166;
-            --danger: #ef476f;
+            --kitty-bg: #fff5f8;       /* Pink susu lembut */
+            --kitty-white: #ffffff;    /* Putih bersih karakter */
+            --kitty-pink: #ff85b3;     /* Pink utama */
+            --kitty-pink-soft: #ffd6e6;/* Pink pastel */
+            --kitty-bow: #ff2e63;      /* Merah pita Hello Kitty */
+            --kitty-ink: #3b2631;      /* Cokelat keunguan gelap untuk teks & border */
+            --kitty-muted: #8c6b7a;    /* Teks sekunder */
+            --kitty-mint: #38b2ac;     /* Hijau toska aktif */
+            --kitty-gold: #f6ad55;     /* Kuning hangat */
+            --kitty-danger: #e53e3e;   /* Merah error */
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             min-height: 100vh;
-            color: var(--spot);
+            color: var(--kitty-ink);
             font-family: 'Nunito', sans-serif;
-            background-color: var(--milk);
+            background-color: var(--kitty-bg);
+            /* Pola pita & hati kecil bernuansa Hello Kitty */
             background-image:
-                radial-gradient(circle at 12% 14%, rgba(126, 217, 87, 0.16), transparent 38%),
-                radial-gradient(circle at 88% 86%, rgba(255, 158, 181, 0.2), transparent 38%),
-                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220'%3E%3Cg fill='%23242124' fill-opacity='0.07'%3E%3Cpath d='M42 28c14-6 31 2 35 16 4 13-5 29-18 33-13 4-28-4-32-17-4-13 1-26 15-32z'/%3E%3Cpath d='M155 45c18-4 36 10 34 27-2 15-17 24-31 21-15-3-25-18-21-32 3-10 8-14 18-16z'/%3E%3Cpath d='M85 135c20-8 44 4 47 24 3 18-13 35-31 37-19 2-38-12-38-31 0-14 9-24 22-30z'/%3E%3Cpath d='M180 165c10-3 21 3 23 13 2 10-5 20-15 22-10 2-20-5-21-15-1-9 4-17 13-20z'/%3E%3Cpath d='M22 160c11-2 22 6 21 17-1 10-10 17-20 16-10-1-17-10-16-20 1-7 7-11 15-13z'/%3E%3C/g%3E%3C/svg%3E");
-            background-size: auto, auto, 220px 220px;
+                radial-gradient(circle at 12% 10%, rgba(255, 46, 99, 0.10), transparent 40%),
+                radial-gradient(circle at 88% 90%, rgba(255, 133, 179, 0.18), transparent 42%),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cg fill='%23ff2e63' fill-opacity='0.075'%3E%3Cg transform='translate(44 46) rotate(-15)'%3E%3Ccircle cx='0' cy='0' r='5'/%3E%3Cpath d='M-4 0 L-16 -9 C-19 -4 -19 4 -16 9 Z'/%3E%3Cpath d='M4 0 L16 -9 C19 -4 19 4 16 9 Z'/%3E%3C/g%3E%3Cg transform='translate(128 124) rotate(18)'%3E%3Cpath d='M0 12 C-12 4 -14 -8 -6 -12 C-2 -14 2 -11 0 -7 C-2 -11 2 -14 6 -12 C14 -8 12 4 0 12 Z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            background-size: auto, auto, 180px 180px;
             background-attachment: fixed;
             display: flex; justify-content: center; align-items: center; padding: 54px 20px 32px;
         }
 
-        /* Tanduk & Telinga Sapi di Atas Kartu */
-        .cow-horns {
+        /* Telinga Putih Hello Kitty di Atas Kartu */
+        .kitty-ears {
             position: absolute; top: 0; left: 0; right: 0; height: 0;
             pointer-events: none;
+            filter: drop-shadow(2px 0 0 var(--kitty-ink)) drop-shadow(-2px 0 0 var(--kitty-ink)) drop-shadow(0 -2px 0 var(--kitty-ink));
         }
-        .cow-horns::before, .cow-horns::after {
-            content: ""; position: absolute; top: -25px;
-            width: 20px; height: 26px;
-            background: var(--bell);
-            border: 3px solid var(--spot);
-            border-radius: 50% 50% 0 0;
+        .kitty-ears::before, .kitty-ears::after {
+            content: ""; position: absolute; bottom: -3px;
+            width: 58px; height: 54px;
+            clip-path: polygon(0 100%, 50% 0, 100% 100%);
+            background: var(--kitty-white);
+            transform-origin: 50% 100%;
         }
-        .cow-horns::before { left: 76px; transform: rotate(-12deg); }
-        .cow-horns::after { right: 76px; transform: rotate(12deg); }
+        .kitty-ears::before { left: 26px; transform: rotate(-14deg); }
+        .kitty-ears::after { right: 26px; transform: rotate(14deg); }
 
-        .cow-ears {
-            position: absolute; top: 0; left: 0; right: 0; height: 0;
+        /* Pita Merah Ikonik Hello Kitty di Telinga Kiri (sisi kanan kartu) */
+        .kitty-bow {
+            position: absolute; top: -24px; right: 22px;
+            width: 74px; height: 38px;
             pointer-events: none;
+            z-index: 10;
+            transform: rotate(16deg);
         }
-        .cow-ears::before, .cow-ears::after {
-            content: ""; position: absolute; top: -20px;
-            width: 54px; height: 30px;
-            border: 3px solid var(--spot);
-            border-radius: 50% 50% 50% 50% / 70% 70% 30% 30%;
+        .kitty-bow::before, .kitty-bow::after {
+            content: ""; position: absolute; top: 3px;
+            width: 30px; height: 30px;
+            background: var(--kitty-bow);
+            border: 3px solid var(--kitty-ink);
+            border-radius: 50% 20% 50% 20%;
+            box-shadow: 0 2px 0 rgba(59, 38, 49, 0.25);
         }
-        .cow-ears::before {
-            left: 24px;
-            transform: rotate(-28deg);
-            background: var(--milk);
-            box-shadow: inset 0 -6px 0 var(--snout);
-        }
-        .cow-ears::after {
-            right: 24px;
-            transform: rotate(28deg);
-            background: var(--spot);
-            box-shadow: inset 0 -6px 0 var(--snout-dark);
+        .kitty-bow::before { left: 2px; transform: rotate(-16deg); }
+        .kitty-bow::after { right: 2px; transform: scaleX(-1) rotate(-16deg); }
+        .kitty-bow-knot {
+            position: absolute; top: 7px; left: 50%;
+            transform: translateX(-50%);
+            width: 20px; height: 22px;
+            background: #ff4d79;
+            border: 3px solid var(--kitty-ink);
+            border-radius: 8px;
         }
 
         .container {
             position: relative; width: 100%; max-width: 430px;
             padding: 34px 32px 30px; border-radius: 30px;
-            background: #ffffff;
-            border: 3px solid var(--spot);
-            box-shadow: 7px 7px 0 var(--spot);
+            background: var(--kitty-white);
+            border: 3px solid var(--kitty-ink);
+            box-shadow: 7px 7px 0 var(--kitty-pink-soft);
         }
 
         .terminal-bar { display: flex; align-items: center; gap: 7px; margin-bottom: 20px; }
-        .terminal-dot { width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--spot); }
-        .dot-red { background: var(--snout); }
-        .dot-yellow { background: var(--bell); }
-        .dot-green { background: var(--grass); }
-        .terminal-title { margin-left: auto; font-size: 12px; font-weight: 800; color: var(--spot-soft); }
+        .terminal-dot { width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--kitty-ink); }
+        .dot-red { background: var(--kitty-bow); }
+        .dot-yellow { background: #ffd166; }
+        .dot-green { background: #81e6d9; }
+        .terminal-title { margin-left: auto; font-size: 12px; font-weight: 800; color: var(--kitty-muted); }
 
         .header { text-align: center; margin-bottom: 26px; }
         .racing-icon {
             width: 78px; height: 78px; margin: 0 auto 12px;
             display: flex; justify-content: center; align-items: center; font-size: 40px;
-            border-radius: 50%; background: var(--milk-card); border: 3px solid var(--spot);
-            box-shadow: 0 4px 0 var(--spot);
+            border-radius: 50%; background: var(--kitty-bg); border: 3px solid var(--kitty-ink);
+            box-shadow: 0 4px 0 var(--kitty-pink-soft);
         }
         .header h1 {
-            font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 38px; line-height: 1.1;
-            color: var(--spot); margin-bottom: 12px;
+            font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 34px; line-height: 1.1;
+            color: var(--kitty-ink); margin-bottom: 12px;
         }
         .header p {
             display: inline-block; padding: 4px 16px; border-radius: 999px;
-            background: var(--snout); border: 2px solid var(--spot);
-            color: var(--spot); font-size: 13px; font-weight: 800;
-            box-shadow: 2px 2px 0 var(--spot);
+            background: var(--kitty-pink-soft); border: 2px solid var(--kitty-bow);
+            color: var(--kitty-bow); font-size: 13px; font-weight: 800;
         }
 
         .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 6px; padding-left: 4px; color: var(--spot); font-size: 14px; font-weight: 800; }
+        .form-group label { display: block; margin-bottom: 6px; padding-left: 4px; color: var(--kitty-ink); font-size: 14px; font-weight: 800; }
         .form-group input {
-            width: 100%; padding: 12px 16px; background: var(--milk); border: 2px solid var(--spot);
+            width: 100%; padding: 12px 16px; background: var(--kitty-bg); border: 2px solid var(--kitty-ink);
             border-radius: 16px; font-size: 14px; font-weight: 700; font-family: 'Nunito', sans-serif;
-            color: var(--spot); outline: none; transition: box-shadow 0.2s ease, background 0.2s ease;
+            color: var(--kitty-ink); outline: none; transition: box-shadow 0.2s ease, background 0.2s ease;
         }
-        .form-group input::placeholder { color: #8c858c; }
-        .form-group input:focus { background: #ffffff; box-shadow: 3px 3px 0 var(--grass); }
+        .form-group input::placeholder { color: #b58d9f; font-weight: 600; }
+        .form-group input:focus { background: #ffffff; border-color: var(--kitty-bow); box-shadow: 3px 3px 0 var(--kitty-pink-soft); }
 
         .btn {
-            width: 100%; margin-top: 8px; padding: 13px; border: 3px solid var(--spot); border-radius: 16px;
-            background: var(--grass);
-            color: var(--spot); font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 20px; letter-spacing: 0.05em;
-            cursor: pointer; box-shadow: 0 5px 0 var(--spot);
+            width: 100%; margin-top: 8px; padding: 13px; border: 3px solid var(--kitty-ink); border-radius: 16px;
+            background: linear-gradient(180deg, #ff5c85 0%, var(--kitty-bow) 100%);
+            color: #ffffff; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 20px; letter-spacing: 0.05em;
+            cursor: pointer; box-shadow: 0 5px 0 var(--kitty-ink), 0 10px 20px rgba(255, 46, 99, 0.22);
             transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.2s ease;
         }
-        .btn:hover { filter: brightness(1.05); }
-        .btn:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--spot); }
+        .btn:hover { filter: brightness(1.06); }
+        .btn:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--kitty-ink); }
+        .btn:disabled { background: #f3d1dc; color: #9c7a8a; box-shadow: 0 4px 0 #b58d9f; cursor: not-allowed; }
 
-        .message { padding: 12px 16px; border-radius: 14px; margin-top: 16px; display: none; font-size: 13px; font-weight: 800; text-align: center; border: 2px solid var(--spot); }
-        .message.success { background: #e8fbe3; color: #1f6e14; }
-        .message.error { background: #ffe5ec; color: var(--danger); }
-        .message.info { background: #fff6d6; color: #7a5600; }
+        .message { padding: 12px 16px; border-radius: 14px; margin-top: 16px; display: none; font-size: 13px; font-weight: 800; text-align: center; border: 2px solid; }
+        .message.success { background: #e6fffa; color: #234e52; border-color: var(--kitty-mint); }
+        .message.error { background: #fff5f7; color: var(--kitty-bow); border-color: var(--kitty-bow); }
+        .message.info { background: #fff0f6; color: var(--kitty-ink); border-color: var(--kitty-pink); }
 
-        .register-link { text-align: center; margin-top: 22px; color: var(--spot-soft); font-size: 14px; font-weight: 700; }
-        .register-link a { color: var(--spot); font-weight: 800; text-decoration: none; background: var(--bell); padding: 2px 8px; border-radius: 8px; border: 1.5px solid var(--spot); }
-        .register-link a:hover { background: var(--grass); }
+        .register-link { text-align: center; margin-top: 22px; color: var(--kitty-muted); font-size: 14px; font-weight: 700; }
+        .register-link a {
+            color: var(--kitty-bow); font-weight: 800; text-decoration: none;
+            background: var(--kitty-pink-soft); padding: 2px 10px; border-radius: 10px;
+            border: 1.5px solid var(--kitty-bow);
+        }
+        .register-link a:hover { background: var(--kitty-bow); color: #ffffff; }
 
-        .loading { display: inline-block; width: 14px; height: 14px; border: 3px solid rgba(36, 33, 36, 0.25); border-radius: 50%; border-top-color: var(--spot); animation: spin 0.8s linear infinite; margin-right: 8px; vertical-align: middle; }
+        .loading { display: inline-block; width: 14px; height: 14px; border: 3px solid rgba(255, 255, 255, 0.35); border-radius: 50%; border-top-color: #ffffff; animation: spin 0.8s linear infinite; margin-right: 8px; vertical-align: middle; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        .status-check { margin-top: 16px; padding: 16px; background: var(--milk-card); border: 2px dashed var(--spot); border-radius: 18px; display: none; }
+        .status-check { margin-top: 16px; padding: 16px; background: var(--kitty-bg); border: 2px dashed var(--kitty-pink); border-radius: 18px; display: none; }
         .status-check.show { display: block; }
-        .status-check input { width: calc(100% - 68px); padding: 10px 14px; background: #ffffff; border: 2px solid var(--spot); border-radius: 12px; color: var(--spot); margin-right: 6px; outline: none; font-size: 13px; font-weight: 700; font-family: 'Nunito', sans-serif; }
-        .status-check button { padding: 10px 16px; background: var(--bell); color: var(--spot); border: 2px solid var(--spot); border-radius: 12px; cursor: pointer; font-weight: 800; font-size: 13px; font-family: 'Nunito', sans-serif; box-shadow: 0 2px 0 var(--spot); }
+        .status-check input { width: calc(100% - 68px); padding: 10px 14px; background: #ffffff; border: 2px solid var(--kitty-ink); border-radius: 12px; color: var(--kitty-ink); margin-right: 6px; outline: none; font-size: 13px; font-weight: 700; font-family: 'Nunito', sans-serif; }
+        .status-check button { padding: 10px 16px; background: var(--kitty-pink-soft); color: var(--kitty-ink); border: 2px solid var(--kitty-ink); border-radius: 12px; cursor: pointer; font-weight: 800; font-size: 13px; font-family: 'Nunito', sans-serif; box-shadow: 0 2px 0 var(--kitty-ink); }
         .status-check button:active { transform: translateY(2px); box-shadow: none; }
 
-        .status-result { margin-top: 10px; padding: 10px 14px; border-radius: 12px; font-size: 12px; font-weight: 800; display: none; border: 2px solid var(--spot); }
-        .status-result.approved { background: var(--grass); color: var(--spot); }
-        .status-result.pending { background: var(--bell); color: var(--spot); }
-        .status-result.rejected { background: var(--snout); color: var(--spot); }
-        .status-result.not-found { background: #e6e2da; color: var(--spot); }
+        .status-result { margin-top: 10px; padding: 10px 14px; border-radius: 12px; font-size: 12px; font-weight: 800; display: none; border: 2px solid; }
+        .status-result.approved { background: #e6fffa; color: #234e52; border-color: var(--kitty-mint); }
+        .status-result.pending { background: #fffff0; color: #975a16; border-color: var(--kitty-gold); }
+        .status-result.rejected { background: #fff5f7; color: var(--kitty-bow); border-color: var(--kitty-bow); }
+        .status-result.not-found { background: #edf2f7; color: var(--kitty-ink); border-color: #cbd5e0; }
 
-        .toggle-status { background: none; border: none; color: var(--spot-soft); cursor: pointer; font-size: 13px; font-weight: 800; text-decoration: underline dotted var(--spot); text-underline-offset: 4px; }
-        .toggle-status:hover { color: var(--spot); }
+        .toggle-status { background: none; border: none; color: var(--kitty-muted); cursor: pointer; font-size: 13px; font-weight: 800; text-decoration: underline dotted var(--kitty-bow); text-underline-offset: 4px; }
+        .toggle-status:hover { color: var(--kitty-bow); }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="cow-horns"></div>
-        <div class="cow-ears"></div>
+        <div class="kitty-ears"></div>
+        <div class="kitty-bow">
+            <div class="kitty-bow-knot"></div>
+        </div>
         <div class="terminal-bar">
             <div class="terminal-dot dot-red"></div>
             <div class="terminal-dot dot-yellow"></div>
             <div class="terminal-dot dot-green"></div>
-            <div class="terminal-title">🐄 hotspot-auth</div>
+            <div class="terminal-title">🎀 hotspot-auth</div>
         </div>
         <div class="header">
-            <div class="racing-icon">🐮</div>
-            <h1>Moo Hotspot</h1>
-            <p>🥛 Moo-velous WiFi 🥛</p>
+            <div class="racing-icon">🐱</div>
+            <h1>Hello Kitty Hotspot</h1>
+            <p>🎀 Sweet & Cute WiFi 🎀</p>
         </div>
         <form id="loginForm" name="login" action="$(link-login-only)" method="post">
             <input type="hidden" name="dst" value="$(link-orig)">
@@ -183,7 +196,7 @@
         </form>
         <div class="message" id="message"></div>
         <div class="status-check" id="statusCheck">
-            <p style="margin-bottom: 8px; color: #242124; font-size: 13px; font-weight: 800;">Cek Telemetri Registrasi:</p>
+            <p style="margin-bottom: 8px; color: #3b2631; font-size: 13px; font-weight: 800;">Cek Telemetri Registrasi:</p>
             <div style="display: flex;">
                 <input type="text" id="checkUsername" placeholder="Username Driver">
                 <button type="button" onclick="checkStatus()">Cek</button>
