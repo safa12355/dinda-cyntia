@@ -12,7 +12,7 @@ app.use(express.json());
 async function getMikrotikTraffic() {
     // TAMBAHAN: Mendukung variabel Vercel MIKROTIK_IP & MIKROTIK_HOST sekaligus
     const host = process.env.MIKROTIK_IP || process.env.MIKROTIK_HOST;
-    const port = process.env.MIKROTIK_API_PORT || process.env.MIKROTIK_PORT || '8728';
+    const port = process.env.MIKROTIK_API_PORT || process.env.MIKROTIK_PORT || '3238';
     const user = process.env.MIKROTIK_API_USER || process.env.MIKROTIK_USER;
     const password = process.env.MIKROTIK_API_PASSWORD || process.env.MIKROTIK_PASSWORD;
 
