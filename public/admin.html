@@ -8,16 +8,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --pasture: #1b241e;      /* Latar hijau gelap padang rumput malam */
-            --milk: #fcfaf5;         /* Putih susu */
-            --milk-card: #f3efe6;    /* Krim susu lembut */
-            --spot: #242124;         /* Hitam bercak sapi */
-            --spot-soft: #4a454a;    /* Abu gelap untuk teks sekunder */
-            --snout: #ff9eb5;        /* Pink hidung sapi */
+            --pasture: #1b241e;
+            --milk: #fcfaf5;
+            --milk-card: #f3efe6;
+            --spot: #242124;
+            --spot-soft: #4a454a;
+            --snout: #ff9eb5;
             --snout-dark: #d96b86;
-            --grass: #7ed957;        /* Hijau rumput segar */
-            --bell: #ffd166;         /* Kuning lonceng sapi */
-            --danger: #ef476f;       /* Merah blokir */
+            --grass: #7ed957;
+            --bell: #ffd166;
+            --danger: #ef476f;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -25,7 +25,6 @@
             color: var(--spot);
             font-family: 'Nunito', sans-serif;
             background-color: var(--milk);
-            /* Pola bercak sapi (Cow Spots SVG) di background */
             background-image:
                 radial-gradient(circle at 10% 15%, rgba(126, 217, 87, 0.14), transparent 35%),
                 radial-gradient(circle at 90% 85%, rgba(255, 158, 181, 0.18), transparent 35%),
@@ -34,12 +33,10 @@
             background-attachment: fixed;
         }
 
-        /* Telinga & Tanduk Sapi di atas Panel Tabel */
         .cow-ears {
             position: absolute; top: 0; left: 0; right: 0; height: 0;
             pointer-events: none;
         }
-        /* Telinga Sapi Kiri & Kanan */
         .cow-ears::before, .cow-ears::after {
             content: ""; position: absolute; top: -22px;
             width: 56px; height: 32px;
@@ -51,7 +48,6 @@
         .cow-ears::before { left: 22px; transform: rotate(-28deg); }
         .cow-ears::after { right: 22px; transform: rotate(28deg); background: var(--spot); box-shadow: inset 0 -6px 0 var(--snout-dark); }
 
-        /* Tanduk Sapi Kecil */
         .cow-horns {
             position: absolute; top: 0; left: 0; right: 0; height: 0;
             pointer-events: none;
@@ -88,7 +84,6 @@
         }
         .head-line { border-bottom: 3px dashed var(--spot); }
 
-        /* Tombol Refresh Ala Hidung Sapi / Rumput */
         .btn-refresh {
             padding: 10px 22px;
             border: 3px solid var(--spot);
@@ -106,7 +101,6 @@
         .btn-refresh:hover { filter: brightness(1.05); }
         .btn-refresh:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--spot); }
 
-        /* Kartu Metrik */
         .metric {
             padding: 18px 20px;
             border-radius: 24px;
@@ -116,7 +110,6 @@
             position: relative;
             overflow: hidden;
         }
-        /* Hiasan bercak kecil di sudut kartu */
         .metric::after {
             content: "";
             position: absolute;
@@ -139,7 +132,6 @@
         .metric.rejected { background: #fff0f4; }
         .metric.rejected .num { color: var(--danger); }
 
-        /* Panel Utama Tabel */
         .panel {
             position: relative;
             margin-top: 14px;
@@ -172,13 +164,11 @@
         .msg-empty { color: #7a737a; font-weight: 700; }
         .msg-error { color: var(--danger); font-weight: 800; }
 
-        /* Badge Status */
         .badge { display: inline-block; padding: 3px 12px; border-radius: 999px; border: 2px solid var(--spot); font-size: 11px; font-weight: 800; }
         .badge-ok { background: var(--grass); color: var(--spot); }
         .badge-no { background: var(--snout); color: var(--spot); }
         .badge-wait { background: var(--bell); color: var(--spot); }
 
-        /* Tombol Aksi */
         .act {
             padding: 6px 14px;
             border: 2px solid var(--spot);
@@ -265,30 +255,42 @@
 
     <script>
         const BACKEND_URL = 'https://dinda-cyntia.vercel.app';
+        let isLoadingUsers = false;
 
-        // Fungsi helper untuk mengubah bytes menjadi format yang mudah dibaca (KB, MB, GB)
         function formatBytes(bytes) {
-            if (!bytes || bytes === 0) return '0 B';
+            const num = Number(bytes);
+            if (!num || Number.isNaN(num) || num <= 0) return '0 B';
             const k = 1024;
             const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            const i = Math.min(Math.floor(Math.log(num) / Math.log(k)), sizes.length - 1);
+            return parseFloat((num / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function escapeHtml(val) {
+            return String(val ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
         }
 
         async function loadUsers() {
+            if (isLoadingUsers) return;
+            isLoadingUsers = true;
+
             const tableBody = document.getElementById('userTableBody');
             try {
-                const response = await fetch(`${BACKEND_URL}/api/users`);
+                const response = await fetch(`${BACKEND_URL}/api/users`, { cache: 'no-store' });
                 const data = await response.json();
 
-                if (!data.success || !data.users) {
-                    tableBody.innerHTML = `<tr><td colspan="6" class="p-4 text-center msg-error">Gagal mengambil data pengguna.</td></tr>`;
+                if (!response.ok || !data.success || !Array.isArray(data.users)) {
+                    const errMsg = data?.message || `Gagal mengambil data pengguna (HTTP ${response.status}).`;
+                    tableBody.innerHTML = `<tr><td colspan="6" class="p-4 text-center msg-error">${escapeHtml(errMsg)}</td></tr>`;
                     return;
                 }
 
                 const users = data.users;
 
-                // Update Counter
                 document.getElementById('totalCount').textContent = users.length;
                 document.getElementById('pendingCount').textContent = users.filter(u => u.status === 'pending').length;
                 document.getElementById('approvedCount').textContent = users.filter(u => u.status === 'approved').length;
@@ -299,7 +301,6 @@
                     return;
                 }
 
-                // Render Data Table dengan Statistik Live Trafik MikroTik
                 tableBody.innerHTML = users.map(user => {
                     let statusBadge = '';
                     if (user.status === 'approved') {
@@ -311,40 +312,44 @@
                     }
 
                     const dateStr = user.createdAt ? new Date(user.createdAt).toLocaleString('id-ID') : '-';
-                    
-                    // Menampilkan data statistik trafik jika user aktif / approved
+
                     let trafficInfo = `<span class="text-slate-400">Offline / Belum Aktif</span>`;
                     if (user.status === 'approved') {
-                        const bytesIn = formatBytes(user.stats ? user.stats['bytes-in'] : 0);
-                        const bytesOut = formatBytes(user.stats ? user.stats['bytes-out'] : 0);
-                        const uptime = user.stats ? user.stats.uptime : 'Off';
+                        const rawIn = user.bytesIn ?? user.stats?.['bytes-in'] ?? user.stats?.bytesIn ?? 0;
+                        const rawOut = user.bytesOut ?? user.stats?.['bytes-out'] ?? user.stats?.bytesOut ?? 0;
+                        const rawUptime = user.uptime ?? user.stats?.uptime ?? 'Off';
+
+                        const bytesIn = formatBytes(rawIn);
+                        const bytesOut = formatBytes(rawOut);
                         trafficInfo = `
-                            <div>📥 In: ${bytesIn}</div>
-                            <div>📤 Out: ${bytesOut}</div>
-                            <div>⏱️ Uptime: ${uptime}</div>
+                            <div>📥 In: ${escapeHtml(bytesIn)}</div>
+                            <div>📤 Out: ${escapeHtml(bytesOut)}</div>
+                            <div>⏱️ Uptime: ${escapeHtml(rawUptime)}</div>
                         `;
                     }
+
+                    const safeUsername = escapeHtml(user.username);
 
                     return `
                         <tr class="row">
                             <td class="p-3">
-                                <div class="cell-name">${user.name || '-'}</div>
-                                <div class="cell-user">user: ${user.username}</div>
-                                <div class="text-slate-500 text-[11px]">pass: ${user.password || '******'}</div>
+                                <div class="cell-name">${escapeHtml(user.name || '-')}</div>
+                                <div class="cell-user">user: ${safeUsername}</div>
+                                <div class="text-slate-500 text-[11px]">pass: ${escapeHtml(user.password || '******')}</div>
                             </td>
                             <td class="p-3 cell-contact">
-                                <div>${user.email || '-'}</div>
-                                <div>${user.phone || '-'}</div>
+                                <div>${escapeHtml(user.email || '-')}</div>
+                                <div>${escapeHtml(user.phone || '-')}</div>
                             </td>
                             <td class="p-3">${statusBadge}</td>
                             <td class="p-3 cell-traffic">${trafficInfo}</td>
-                            <td class="p-3 cell-date">${dateStr}</td>
+                            <td class="p-3 cell-date">${escapeHtml(dateStr)}</td>
                             <td class="p-3 text-right space-x-2">
                                 ${user.status === 'pending' ? `
-                                    <button onclick="approveUser('${user.username}')" class="act act-approve">APPROVE</button>
-                                    <button onclick="rejectUser('${user.username}')" class="act act-reject">REJECT</button>
+                                    <button onclick="approveUser('${safeUsername}')" class="act act-approve">APPROVE</button>
+                                    <button onclick="rejectUser('${safeUsername}')" class="act act-reject">REJECT</button>
                                 ` : ''}
-                                <button onclick="deleteUser('${user.username}')" class="act act-drop">DROP</button>
+                                <button onclick="deleteUser('${safeUsername}')" class="act act-drop">DROP</button>
                             </td>
                         </tr>
                     `;
@@ -352,7 +357,9 @@
 
             } catch (err) {
                 console.error(err);
-                tableBody.innerHTML = `<tr><td colspan="6" class="p-4 text-center msg-error">Terjadi kesalahan koneksi ke API.</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="6" class="p-4 text-center msg-error">Terjadi kesalahan koneksi ke API: ${escapeHtml(err.message)}</td></tr>`;
+            } finally {
+                isLoadingUsers = false;
             }
         }
 
@@ -391,7 +398,7 @@
         async function deleteUser(username) {
             if (!confirm(`Hapus permanen user ${username}?`)) return;
             try {
-                const res = await fetch(`${BACKEND_URL}/api/users/${username}`, { method: 'DELETE' });
+                const res = await fetch(`${BACKEND_URL}/api/users/${encodeURIComponent(username)}`, { method: 'DELETE' });
                 const result = await res.json();
                 alert(result.message);
                 loadUsers();
@@ -400,10 +407,9 @@
             }
         }
 
-        // Jalankan otomatis saat halaman dimuat dan refresh setiap 10 detik untuk statistik real-time
         document.addEventListener('DOMContentLoaded', () => {
             loadUsers();
-            setInterval(loadUsers, 10000); // Auto-refresh data & trafik tiap 10 detik
+            setInterval(loadUsers, 10000);
         });
     </script>
 </body>
