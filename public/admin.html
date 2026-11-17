@@ -3,64 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moo Hotspot Gateway - Admin Dashboard</title>
+    <title>Hello Kitty Hotspot Gateway - Admin Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --pasture: #1b241e;
-            --milk: #fcfaf5;
-            --milk-card: #f3efe6;
-            --spot: #242124;
-            --spot-soft: #4a454a;
-            --snout: #ff9eb5;
-            --snout-dark: #d96b86;
-            --grass: #7ed957;
-            --bell: #ffd166;
-            --danger: #ef476f;
+            --kitty-bg: #fff5f8;       /* Pink susu sangat lembut */
+            --kitty-white: #ffffff;    /* Putih bersih karakter */
+            --kitty-pink: #ff85b3;     /* Pink utama */
+            --kitty-pink-soft: #ffd6e6;/* Pink pastel */
+            --kitty-bow: #ff2e63;      /* Merah pita Hello Kitty */
+            --kitty-ink: #3b2631;      /* Cokelat keunguan gelap untuk teks & border */
+            --kitty-muted: #8c6b7a;    /* Teks sekunder */
+            --kitty-mint: #38b2ac;     /* Hijau toska aktif */
+            --kitty-gold: #f6ad55;     /* Kuning hangat pending */
+            --kitty-danger: #e53e3e;   /* Merah blokir */
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             min-height: 100vh;
-            color: var(--spot);
+            color: var(--kitty-ink);
             font-family: 'Nunito', sans-serif;
-            background-color: var(--milk);
+            background-color: var(--kitty-bg);
+            /* Pola pita kecil & apel/hati bernuansa Hello Kitty di background */
             background-image:
-                radial-gradient(circle at 10% 15%, rgba(126, 217, 87, 0.14), transparent 35%),
-                radial-gradient(circle at 90% 85%, rgba(255, 158, 181, 0.18), transparent 35%),
-                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220'%3E%3Cg fill='%23242124' fill-opacity='0.07'%3E%3Cpath d='M42 28c14-6 31 2 35 16 4 13-5 29-18 33-13 4-28-4-32-17-4-13 1-26 15-32z'/%3E%3Cpath d='M155 45c18-4 36 10 34 27-2 15-17 24-31 21-15-3-25-18-21-32 3-10 8-14 18-16z'/%3E%3Cpath d='M85 135c20-8 44 4 47 24 3 18-13 35-31 37-19 2-38-12-38-31 0-14 9-24 22-30z'/%3E%3Cpath d='M180 165c10-3 21 3 23 13 2 10-5 20-15 22-10 2-20-5-21-15-1-9 4-17 13-20z'/%3E%3Cpath d='M22 160c11-2 22 6 21 17-1 10-10 17-20 16-10-1-17-10-16-20 1-7 7-11 15-13z'/%3E%3C/g%3E%3C/svg%3E");
-            background-size: auto, auto, 220px 220px;
+                radial-gradient(circle at 12% 10%, rgba(255, 46, 99, 0.10), transparent 40%),
+                radial-gradient(circle at 88% 90%, rgba(255, 133, 179, 0.16), transparent 42%),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cg fill='%23ff2e63' fill-opacity='0.075'%3E%3Cg transform='translate(44 46) rotate(-15)'%3E%3Ccircle cx='0' cy='0' r='5'/%3E%3Cpath d='M-4 0 L-16 -9 C-19 -4 -19 4 -16 9 Z'/%3E%3Cpath d='M4 0 L16 -9 C19 -4 19 4 16 9 Z'/%3E%3C/g%3E%3Cg transform='translate(128 124) rotate(18)'%3E%3Cpath d='M0 12 C-12 4 -14 -8 -6 -12 C-2 -14 2 -11 0 -7 C-2 -11 2 -14 6 -12 C14 -8 12 4 0 12 Z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            background-size: auto, auto, 180px 180px;
             background-attachment: fixed;
         }
 
-        .cow-ears {
-            position: absolute; top: 0; left: 0; right: 0; height: 0;
+        /* Pita Ikonik Hello Kitty di Atas Panel Tabel */
+        .kitty-bow {
+            position: absolute; top: -22px; left: 34px;
+            width: 84px; height: 42px;
             pointer-events: none;
+            z-index: 10;
         }
-        .cow-ears::before, .cow-ears::after {
-            content: ""; position: absolute; top: -22px;
-            width: 56px; height: 32px;
-            background: var(--milk);
-            border: 3px solid var(--spot);
-            border-radius: 50% 50% 50% 50% / 70% 70% 30% 30%;
-            box-shadow: inset 0 -6px 0 var(--snout);
+        .kitty-bow::before, .kitty-bow::after {
+            content: ""; position: absolute; top: 4px;
+            width: 34px; height: 34px;
+            background: var(--kitty-bow);
+            border: 3px solid var(--kitty-ink);
+            border-radius: 50% 20% 50% 20%;
+            box-shadow: 0 3px 0 rgba(59, 38, 49, 0.25);
         }
-        .cow-ears::before { left: 22px; transform: rotate(-28deg); }
-        .cow-ears::after { right: 22px; transform: rotate(28deg); background: var(--spot); box-shadow: inset 0 -6px 0 var(--snout-dark); }
-
-        .cow-horns {
-            position: absolute; top: 0; left: 0; right: 0; height: 0;
-            pointer-events: none;
+        .kitty-bow::before {
+            left: 2px;
+            transform: rotate(-18deg);
         }
-        .cow-horns::before, .cow-horns::after {
-            content: ""; position: absolute; top: -26px;
-            width: 22px; height: 28px;
-            background: var(--bell);
-            border: 3px solid var(--spot);
-            border-radius: 50% 50% 0 0;
+        .kitty-bow::after {
+            right: 2px;
+            transform: scaleX(-1) rotate(-18deg);
         }
-        .cow-horns::before { left: 74px; transform: rotate(-12deg); }
-        .cow-horns::after { right: 74px; transform: rotate(12deg); }
+        .kitty-bow-knot {
+            position: absolute; top: 9px; left: 50%;
+            transform: translateX(-50%);
+            width: 22px; height: 24px;
+            background: #ff4d79;
+            border: 3px solid var(--kitty-ink);
+            border-radius: 9px;
+            box-shadow: 0 2px 0 rgba(59, 38, 49, 0.25);
+        }
 
         .mono { font-family: 'Nunito', sans-serif; font-weight: 700; }
         .brand {
@@ -68,124 +73,109 @@
             font-weight: 700;
             font-size: 32px;
             line-height: 1.1;
-            color: var(--spot);
+            color: var(--kitty-ink);
         }
         .tagline {
             display: inline-block;
             margin-top: 10px;
-            padding: 4px 16px;
+            padding: 3px 14px;
             border-radius: 999px;
-            background: var(--snout);
-            border: 2px solid var(--spot);
-            color: var(--spot);
+            border: 2px solid var(--kitty-bow);
+            background: var(--kitty-pink-soft);
+            color: var(--kitty-bow);
             font-size: 12px;
             font-weight: 800;
-            box-shadow: 2px 2px 0 var(--spot);
         }
-        .head-line { border-bottom: 3px dashed var(--spot); }
+        .head-line { border-bottom: 2px dashed var(--kitty-pink); }
 
         .btn-refresh {
-            padding: 10px 22px;
-            border: 3px solid var(--spot);
+            padding: 10px 20px;
+            border: 3px solid var(--kitty-ink);
             border-radius: 16px;
-            background: var(--grass);
-            color: var(--spot);
+            background: linear-gradient(180deg, #ff5c85 0%, var(--kitty-bow) 100%);
+            color: #ffffff;
             font-family: 'Fredoka', sans-serif;
             font-weight: 700;
             font-size: 15px;
             letter-spacing: 0.04em;
             cursor: pointer;
-            box-shadow: 0 4px 0 var(--spot);
+            box-shadow: 0 4px 0 var(--kitty-ink), 0 8px 18px rgba(255, 46, 99, 0.22);
             transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.2s ease;
         }
-        .btn-refresh:hover { filter: brightness(1.05); }
-        .btn-refresh:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--spot); }
+        .btn-refresh:hover { filter: brightness(1.06); }
+        .btn-refresh:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--kitty-ink); }
 
         .metric {
             padding: 18px 20px;
             border-radius: 24px;
-            background: #ffffff;
-            border: 3px solid var(--spot);
-            box-shadow: 5px 5px 0 var(--spot);
-            position: relative;
-            overflow: hidden;
+            background: var(--kitty-white);
+            border: 3px solid var(--kitty-ink);
+            box-shadow: 5px 5px 0 var(--kitty-pink-soft);
         }
-        .metric::after {
-            content: "";
-            position: absolute;
-            right: -12px;
-            bottom: -12px;
-            width: 48px;
-            height: 48px;
-            background: var(--spot);
-            border-radius: 45% 55% 60% 40%;
-            opacity: 0.08;
-        }
-        .metric .label { font-size: 13px; font-weight: 800; color: var(--spot-soft); }
+        .metric .label { font-size: 13px; font-weight: 800; color: var(--kitty-muted); }
         .metric .num { margin-top: 6px; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 46px; line-height: 1; }
-        .metric.total { background: #ffffff; }
-        .metric.total .num { color: var(--spot); }
-        .metric.pending { background: #fff9e6; }
-        .metric.pending .num { color: #d99b00; }
-        .metric.approved { background: #eefbe8; }
-        .metric.approved .num { color: #2b8a1e; }
-        .metric.rejected { background: #fff0f4; }
-        .metric.rejected .num { color: var(--danger); }
+        .metric.total .num { color: var(--kitty-ink); }
+        .metric.pending { border-color: var(--kitty-gold); box-shadow: 5px 5px 0 #fefcbf; }
+        .metric.pending .num { color: #d69e2e; }
+        .metric.approved { border-color: var(--kitty-mint); box-shadow: 5px 5px 0 #b2f5ea; }
+        .metric.approved .num { color: #2c7a7b; }
+        .metric.rejected { border-color: var(--kitty-bow); box-shadow: 5px 5px 0 var(--kitty-pink-soft); }
+        .metric.rejected .num { color: var(--kitty-bow); }
 
         .panel {
             position: relative;
-            margin-top: 14px;
+            margin-top: 16px;
             padding: 32px 24px 22px;
             border-radius: 30px;
-            background: #ffffff;
-            border: 3px solid var(--spot);
-            box-shadow: 7px 7px 0 var(--spot);
+            background: var(--kitty-white);
+            border: 3px solid var(--kitty-ink);
+            box-shadow: 7px 7px 0 var(--kitty-pink-soft);
         }
         .panel h2 {
             display: inline-block;
             margin-bottom: 16px;
             font-family: 'Fredoka', sans-serif;
-            font-weight: 700;
+            font-weight: 600;
             font-size: 22px;
-            color: var(--spot);
+            color: var(--kitty-ink);
         }
 
-        thead tr { border-bottom: 3px dashed var(--spot) !important; background: var(--milk-card); }
-        thead th { color: var(--spot) !important; font-size: 13px; font-weight: 800; }
+        thead tr { border-bottom: 2px dashed var(--kitty-pink) !important; background: var(--kitty-bg); }
+        thead th { color: var(--kitty-ink) !important; font-size: 13px; font-weight: 800; }
         #userTableBody { font-size: 13px; }
-        .row { border-bottom: 1.5px solid #e5e0d5; transition: background 0.15s ease; }
-        .row:hover { background: #fff5f7; }
+        .row { border-bottom: 1px solid #ffe4ee; transition: background 0.15s ease; }
+        .row:hover { background: #fff0f6; }
 
-        .cell-name { color: var(--spot); font-weight: 800; }
-        .cell-user { color: #2b8a1e; font-weight: 800; }
-        .cell-contact { color: var(--spot-soft); }
-        .cell-date { color: #7a737a; }
-        .cell-traffic { color: #1d6fa5; font-family: monospace; font-size: 11px; font-weight: 700; }
-        .msg-empty { color: #7a737a; font-weight: 700; }
-        .msg-error { color: var(--danger); font-weight: 800; }
+        .cell-name { color: var(--kitty-ink); font-weight: 800; }
+        .cell-user { color: var(--kitty-bow); font-weight: 800; }
+        .cell-contact { color: var(--kitty-muted); }
+        .cell-date { color: #9c7a8a; }
+        .cell-traffic { color: #2b6cb0; font-family: monospace; font-size: 11px; font-weight: 700; }
+        .msg-empty { color: #9c7a8a; }
+        .msg-error { color: var(--kitty-danger); font-weight: 800; }
 
-        .badge { display: inline-block; padding: 3px 12px; border-radius: 999px; border: 2px solid var(--spot); font-size: 11px; font-weight: 800; }
-        .badge-ok { background: var(--grass); color: var(--spot); }
-        .badge-no { background: var(--snout); color: var(--spot); }
-        .badge-wait { background: var(--bell); color: var(--spot); }
+        .badge { display: inline-block; padding: 3px 12px; border-radius: 999px; border: 2px solid; font-size: 12px; font-weight: 800; }
+        .badge-ok { background: #e6fffa; color: #234e52; border-color: var(--kitty-mint); }
+        .badge-no { background: #fff5f7; color: var(--kitty-bow); border-color: var(--kitty-bow); }
+        .badge-wait { background: #fffff0; color: #975a16; border-color: var(--kitty-gold); }
 
         .act {
             padding: 6px 14px;
-            border: 2px solid var(--spot);
+            border: 2px solid var(--kitty-ink);
             border-radius: 12px;
             font-family: 'Nunito', sans-serif;
             font-size: 12px;
             font-weight: 800;
             cursor: pointer;
-            box-shadow: 0 3px 0 var(--spot);
+            box-shadow: 0 3px 0 var(--kitty-ink);
             transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.2s ease;
         }
-        .act:hover { filter: brightness(1.05); }
-        .act:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--spot); }
-        .act-approve { background: var(--grass); color: var(--spot); }
-        .act-reject { background: var(--snout); color: var(--spot); }
-        .act-drop { background: var(--milk-card); color: var(--spot); }
-        .act-drop:hover { background: var(--danger); color: #fff; }
+        .act:hover { filter: brightness(1.06); }
+        .act:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--kitty-ink); }
+        .act-approve { background: #81e6d9; color: #1d4044; }
+        .act-reject { background: var(--kitty-pink-soft); color: var(--kitty-bow); }
+        .act-drop { background: #edf2f7; color: var(--kitty-ink); }
+        .act-drop:hover { background: var(--kitty-danger); color: #fff; }
     </style>
 </head>
 <body class="p-6">
@@ -195,20 +185,20 @@
         <div class="flex flex-wrap justify-between items-center gap-4 head-line pb-5">
             <div>
                 <h1 class="brand flex items-center gap-3">
-                    <span class="text-4xl">🐮</span>
-                    MOO HOTSPOT ADMIN
+                    <span class="w-4 h-4 rounded-full animate-pulse" style="background: var(--kitty-bow); box-shadow: 0 0 12px var(--kitty-bow);"></span>
+                    HELLO KITTY HOTSPOT ADMIN
                 </h1>
-                <p class="tagline">🥛 RouterOS Interface: wlan1-hotspot</p>
+                <p class="tagline">🎀 RouterOS Interface: wlan1-hotspot</p>
             </div>
             <button onclick="loadUsers()" class="btn-refresh flex items-center gap-2">
-                🔔 REFRESH DATA
+                🍎 REFRESH DATA
             </button>
         </div>
 
         <!-- Metric Cards -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
             <div class="metric total">
-                <div class="label">🐄 Total Registrations</div>
+                <div class="label">🎀 Total Registrations</div>
                 <div class="num" id="totalCount">0</div>
             </div>
             <div class="metric pending">
@@ -216,7 +206,7 @@
                 <div class="num" id="pendingCount">0</div>
             </div>
             <div class="metric approved">
-                <div class="label">🌿 Approved / Active</div>
+                <div class="label">🌸 Approved / Active</div>
                 <div class="num" id="approvedCount">0</div>
             </div>
             <div class="metric rejected">
@@ -227,11 +217,12 @@
 
         <!-- Table Section -->
         <div class="panel">
-            <div class="cow-horns"></div>
-            <div class="cow-ears"></div>
-            <h2>🐄 Subscriber Active Session & Live Traffic Table 🥛</h2>
+            <div class="kitty-bow">
+                <div class="kitty-bow-knot"></div>
+            </div>
+            <h2>🎀 Subscriber Active Session & Live Traffic Table 🌸</h2>
 
-            <div class="overflow-x-auto rounded-xl border-2 border-[#242124]">
+            <div class="overflow-x-auto rounded-2xl border-2 border-[#ffe4ee]">
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="text-xs mono">
@@ -255,42 +246,30 @@
 
     <script>
         const BACKEND_URL = 'https://dinda-cyntia.vercel.app';
-        let isLoadingUsers = false;
 
+        // Fungsi helper untuk mengubah bytes menjadi format yang mudah dibaca (KB, MB, GB)
         function formatBytes(bytes) {
-            const num = Number(bytes);
-            if (!num || Number.isNaN(num) || num <= 0) return '0 B';
+            if (!bytes || bytes === 0) return '0 B';
             const k = 1024;
             const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-            const i = Math.min(Math.floor(Math.log(num) / Math.log(k)), sizes.length - 1);
-            return parseFloat((num / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-        }
-
-        function escapeHtml(val) {
-            return String(val ?? '')
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;');
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
         }
 
         async function loadUsers() {
-            if (isLoadingUsers) return;
-            isLoadingUsers = true;
-
             const tableBody = document.getElementById('userTableBody');
             try {
-                const response = await fetch(`${BACKEND_URL}/api/users`, { cache: 'no-store' });
+                const response = await fetch(`${BACKEND_URL}/api/users`);
                 const data = await response.json();
 
-                if (!response.ok || !data.success || !Array.isArray(data.users)) {
-                    const errMsg = data?.message || `Gagal mengambil data pengguna (HTTP ${response.status}).`;
-                    tableBody.innerHTML = `<tr><td colspan="6" class="p-4 text-center msg-error">${escapeHtml(errMsg)}</td></tr>`;
+                if (!data.success || !data.users) {
+                    tableBody.innerHTML = `<tr><td colspan="6" class="p-4 text-center msg-error">Gagal mengambil data pengguna.</td></tr>`;
                     return;
                 }
 
                 const users = data.users;
 
+                // Update Counter
                 document.getElementById('totalCount').textContent = users.length;
                 document.getElementById('pendingCount').textContent = users.filter(u => u.status === 'pending').length;
                 document.getElementById('approvedCount').textContent = users.filter(u => u.status === 'approved').length;
@@ -301,6 +280,7 @@
                     return;
                 }
 
+                // Render Data Table dengan Statistik Live Trafik MikroTik
                 tableBody.innerHTML = users.map(user => {
                     let statusBadge = '';
                     if (user.status === 'approved') {
@@ -312,44 +292,40 @@
                     }
 
                     const dateStr = user.createdAt ? new Date(user.createdAt).toLocaleString('id-ID') : '-';
-
-                    let trafficInfo = `<span class="text-slate-400">Offline / Belum Aktif</span>`;
+                    
+                    // Menampilkan data statistik trafik jika user aktif / approved
+                    let trafficInfo = `<span class="text-pink-300">Offline / Belum Aktif</span>`;
                     if (user.status === 'approved') {
-                        const rawIn = user.bytesIn ?? user.stats?.['bytes-in'] ?? user.stats?.bytesIn ?? 0;
-                        const rawOut = user.bytesOut ?? user.stats?.['bytes-out'] ?? user.stats?.bytesOut ?? 0;
-                        const rawUptime = user.uptime ?? user.stats?.uptime ?? 'Off';
-
-                        const bytesIn = formatBytes(rawIn);
-                        const bytesOut = formatBytes(rawOut);
+                        const bytesIn = formatBytes(user.stats ? user.stats['bytes-in'] : 0);
+                        const bytesOut = formatBytes(user.stats ? user.stats['bytes-out'] : 0);
+                        const uptime = user.stats ? user.stats.uptime : 'Off';
                         trafficInfo = `
-                            <div>📥 In: ${escapeHtml(bytesIn)}</div>
-                            <div>📤 Out: ${escapeHtml(bytesOut)}</div>
-                            <div>⏱️ Uptime: ${escapeHtml(rawUptime)}</div>
+                            <div>📥 In: ${bytesIn}</div>
+                            <div>📤 Out: ${bytesOut}</div>
+                            <div>⏱️ Uptime: ${uptime}</div>
                         `;
                     }
-
-                    const safeUsername = escapeHtml(user.username);
 
                     return `
                         <tr class="row">
                             <td class="p-3">
-                                <div class="cell-name">${escapeHtml(user.name || '-')}</div>
-                                <div class="cell-user">user: ${safeUsername}</div>
-                                <div class="text-slate-500 text-[11px]">pass: ${escapeHtml(user.password || '******')}</div>
+                                <div class="cell-name">${user.name || '-'}</div>
+                                <div class="cell-user">user: ${user.username}</div>
+                                <div class="text-pink-400 text-[11px]">pass: ${user.password || '******'}</div>
                             </td>
                             <td class="p-3 cell-contact">
-                                <div>${escapeHtml(user.email || '-')}</div>
-                                <div>${escapeHtml(user.phone || '-')}</div>
+                                <div>${user.email || '-'}</div>
+                                <div>${user.phone || '-'}</div>
                             </td>
                             <td class="p-3">${statusBadge}</td>
                             <td class="p-3 cell-traffic">${trafficInfo}</td>
-                            <td class="p-3 cell-date">${escapeHtml(dateStr)}</td>
+                            <td class="p-3 cell-date">${dateStr}</td>
                             <td class="p-3 text-right space-x-2">
                                 ${user.status === 'pending' ? `
-                                    <button onclick="approveUser('${safeUsername}')" class="act act-approve">APPROVE</button>
-                                    <button onclick="rejectUser('${safeUsername}')" class="act act-reject">REJECT</button>
+                                    <button onclick="approveUser('${user.username}')" class="act act-approve">APPROVE</button>
+                                    <button onclick="rejectUser('${user.username}')" class="act act-reject">REJECT</button>
                                 ` : ''}
-                                <button onclick="deleteUser('${safeUsername}')" class="act act-drop">DROP</button>
+                                <button onclick="deleteUser('${user.username}')" class="act act-drop">DROP</button>
                             </td>
                         </tr>
                     `;
@@ -357,9 +333,7 @@
 
             } catch (err) {
                 console.error(err);
-                tableBody.innerHTML = `<tr><td colspan="6" class="p-4 text-center msg-error">Terjadi kesalahan koneksi ke API: ${escapeHtml(err.message)}</td></tr>`;
-            } finally {
-                isLoadingUsers = false;
+                tableBody.innerHTML = `<tr><td colspan="6" class="p-4 text-center msg-error">Terjadi kesalahan koneksi ke API.</td></tr>`;
             }
         }
 
@@ -398,7 +372,7 @@
         async function deleteUser(username) {
             if (!confirm(`Hapus permanen user ${username}?`)) return;
             try {
-                const res = await fetch(`${BACKEND_URL}/api/users/${encodeURIComponent(username)}`, { method: 'DELETE' });
+                const res = await fetch(`${BACKEND_URL}/api/users/${username}`, { method: 'DELETE' });
                 const result = await res.json();
                 alert(result.message);
                 loadUsers();
@@ -407,9 +381,10 @@
             }
         }
 
+        // Jalankan otomatis saat halaman dimuat dan refresh setiap 10 detik untuk statistik real-time
         document.addEventListener('DOMContentLoaded', () => {
             loadUsers();
-            setInterval(loadUsers, 10000);
+            setInterval(loadUsers, 10000); // Auto-refresh data & trafik tiap 10 detik
         });
     </script>
 </body>
