@@ -67,12 +67,15 @@ app.get('/api/users', async (req, res) => {
     }
 
     const enrichedUsers = users.map(user => {
-      const targetName = String(user.username || '').trim();
-      const stats = mikrotikStats.find(s => String(s.name || s.user || '').trim() === targetName) || {};
+      const targetName = String(user.username || '').trim().toLowerCase();
+      const stats = mikrotikStats.find(s => {
+        const statName = String(s.name || s.user || '').trim().toLowerCase();
+        return statName && statName === targetName;
+      }) || {};
 
       const bytesIn = Number(stats['bytes-in'] ?? stats.bytesIn ?? 0) || 0;
       const bytesOut = Number(stats['bytes-out'] ?? stats.bytesOut ?? 0) || 0;
-      const uptime = stats.uptime || (mikrotikConnected ? 'Off' : 'MikroTik Offline');
+      const uptime = stats.uptime || 'Off';
 
       return {
         ...user,
