@@ -129,7 +129,6 @@ class MikrotikConfig {
         };
       });
 
-      // Sertakan juga user yang ada di /ip/hotspot/active tapi tidak ketemu di /ip/hotspot/user
       for (const act of activeList) {
         if (act.user && !stats.some(s => s.name === act.user)) {
           stats.push({
