@@ -3,66 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello Kitty Hotspot Gateway - Admin Dashboard</title>
+    <title>Bloom Hotspot Gateway - Admin Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --kitty-bg: #fff5f8;
-            --kitty-white: #ffffff;
-            --kitty-pink: #ff85b3;
-            --kitty-pink-soft: #ffd6e6;
-            --kitty-bow: #ff2e63;
-            --kitty-ink: #3b2631;
-            --kitty-muted: #8c6b7a;
-            --kitty-mint: #38b2ac;
-            --kitty-gold: #f6ad55;
-            --kitty-danger: #e53e3e;
+            --garden-bg: #f6fbf7;      /* Latar hijau sage sangat lembut */
+            --petal-white: #ffffff;    /* Putih kelopak bunga */
+            --rose-main: #f472b6;      /* Pink kelopak utama */
+            --rose-soft: #fce7f3;      /* Pink sakura lembut */
+            --leaf-dark: #1e3a2f;      /* Hijau hutan gelap untuk teks & border */
+            --leaf-mid: #3b6e58;       /* Hijau daun */
+            --leaf-mint: #34d399;      /* Hijau segar aktif */
+            --pollen: #fbbf24;         /* Kuning serbuk sari */
+            --danger: #f43f5e;         /* Merah mawar blokir */
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             min-height: 100vh;
-            color: var(--kitty-ink);
+            color: var(--leaf-dark);
             font-family: 'Nunito', sans-serif;
-            background-color: var(--kitty-bg);
+            background-color: var(--garden-bg);
+            /* Pola bunga kelopak lima & daun kecil di background */
             background-image:
-                radial-gradient(circle at 12% 10%, rgba(255, 46, 99, 0.10), transparent 40%),
-                radial-gradient(circle at 88% 90%, rgba(255, 133, 179, 0.16), transparent 42%),
-                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cg fill='%23ff2e63' fill-opacity='0.075'%3E%3Cg transform='translate(44 46) rotate(-15)'%3E%3Ccircle cx='0' cy='0' r='5'/%3E%3Cpath d='M-4 0 L-16 -9 C-19 -4 -19 4 -16 9 Z'/%3E%3Cpath d='M4 0 L16 -9 C19 -4 19 4 16 9 Z'/%3E%3C/g%3E%3Cg transform='translate(128 124) rotate(18)'%3E%3Cpath d='M0 12 C-12 4 -14 -8 -6 -12 C-2 -14 2 -11 0 -7 C-2 -11 2 -14 6 -12 C14 -8 12 4 0 12 Z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+                radial-gradient(circle at 12% 12%, rgba(244, 114, 182, 0.14), transparent 40%),
+                radial-gradient(circle at 88% 88%, rgba(52, 211, 153, 0.16), transparent 42%),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cg fill='%23f472b6' fill-opacity='0.09'%3E%3Cg transform='translate(45 48)'%3E%3Ccircle cx='0' cy='-10' r='6.5'/%3E%3Ccircle cx='9.5' cy='-3' r='6.5'/%3E%3Ccircle cx='6' cy='8' r='6.5'/%3E%3Ccircle cx='-6' cy='8' r='6.5'/%3E%3Ccircle cx='-9.5' cy='-3' r='6.5'/%3E%3Ccircle cx='0' cy='0' r='4' fill='%23fbbf24' fill-opacity='0.45'/%3E%3C/g%3E%3Cg transform='translate(132 128) rotate(20)' fill='%2334d399' fill-opacity='0.11'%3E%3Cpath d='M0 -12 C9 -4 9 6 0 12 C-9 6 -9 -4 0 -12 Z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
             background-size: auto, auto, 180px 180px;
             background-attachment: fixed;
         }
 
-        .kitty-bow {
-            position: absolute; top: -22px; left: 34px;
-            width: 84px; height: 42px;
+        /* Ornamen Bunga & Daun di Atas Panel Tabel */
+        .flower-ornament {
+            position: absolute; top: -24px; left: 32px;
+            width: 84px; height: 48px;
             pointer-events: none;
             z-index: 10;
         }
-        .kitty-bow::before, .kitty-bow::after {
-            content: ""; position: absolute; top: 4px;
-            width: 34px; height: 34px;
-            background: var(--kitty-bow);
-            border: 3px solid var(--kitty-ink);
-            border-radius: 50% 20% 50% 20%;
-            box-shadow: 0 3px 0 rgba(59, 38, 49, 0.25);
+        /* Sepasang Daun Hijau di Kiri & Kanan Bunga */
+        .flower-ornament::before, .flower-ornament::after {
+            content: ""; position: absolute; bottom: 6px;
+            width: 28px; height: 18px;
+            background: var(--leaf-mint);
+            border: 2.5px solid var(--leaf-dark);
+            border-radius: 0 70% 0 70%;
         }
-        .kitty-bow::before {
-            left: 2px;
-            transform: rotate(-18deg);
-        }
-        .kitty-bow::after {
-            right: 2px;
-            transform: scaleX(-1) rotate(-18deg);
-        }
-        .kitty-bow-knot {
-            position: absolute; top: 9px; left: 50%;
+        .flower-ornament::before { left: 4px; transform: rotate(-18deg); }
+        .flower-ornament::after { right: 4px; transform: scaleX(-1) rotate(-18deg); }
+
+        /* Kepala Bunga Mekar di Tengah */
+        .flower-bloom {
+            position: absolute; top: 2px; left: 50%;
             transform: translateX(-50%);
-            width: 22px; height: 24px;
-            background: #ff4d79;
-            border: 3px solid var(--kitty-ink);
-            border-radius: 9px;
-            box-shadow: 0 2px 0 rgba(59, 38, 49, 0.25);
+            width: 38px; height: 38px;
+            background: var(--rose-main);
+            border: 3px solid var(--leaf-dark);
+            border-radius: 50%;
+            box-shadow: 0 3px 0 rgba(30, 58, 47, 0.25);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .flower-bloom::after {
+            content: "";
+            width: 14px; height: 14px;
+            background: var(--pollen);
+            border: 2px solid var(--leaf-dark);
+            border-radius: 50%;
         }
 
         .mono { font-family: 'Nunito', sans-serif; font-weight: 700; }
@@ -71,63 +76,63 @@
             font-weight: 700;
             font-size: 32px;
             line-height: 1.1;
-            color: var(--kitty-ink);
+            color: var(--leaf-dark);
         }
         .tagline {
             display: inline-block;
             margin-top: 10px;
             padding: 3px 14px;
             border-radius: 999px;
-            border: 2px solid var(--kitty-bow);
-            background: var(--kitty-pink-soft);
-            color: var(--kitty-bow);
+            border: 2px solid var(--rose-main);
+            background: var(--rose-soft);
+            color: #be185d;
             font-size: 12px;
             font-weight: 800;
         }
-        .head-line { border-bottom: 2px dashed var(--kitty-pink); }
+        .head-line { border-bottom: 2px dashed #86efac; }
 
         .btn-refresh {
             padding: 10px 20px;
-            border: 3px solid var(--kitty-ink);
+            border: 3px solid var(--leaf-dark);
             border-radius: 16px;
-            background: linear-gradient(180deg, #ff5c85 0%, var(--kitty-bow) 100%);
-            color: #ffffff;
+            background: linear-gradient(180deg, #f9a8d4 0%, var(--rose-main) 100%);
+            color: var(--leaf-dark);
             font-family: 'Fredoka', sans-serif;
             font-weight: 700;
             font-size: 15px;
             letter-spacing: 0.04em;
             cursor: pointer;
-            box-shadow: 0 4px 0 var(--kitty-ink), 0 8px 18px rgba(255, 46, 99, 0.22);
+            box-shadow: 0 4px 0 var(--leaf-dark), 0 8px 18px rgba(244, 114, 182, 0.25);
             transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.2s ease;
         }
-        .btn-refresh:hover { filter: brightness(1.06); }
-        .btn-refresh:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--kitty-ink); }
+        .btn-refresh:hover { filter: brightness(1.05); }
+        .btn-refresh:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--leaf-dark); }
 
         .metric {
             padding: 18px 20px;
             border-radius: 24px;
-            background: var(--kitty-white);
-            border: 3px solid var(--kitty-ink);
-            box-shadow: 5px 5px 0 var(--kitty-pink-soft);
+            background: var(--petal-white);
+            border: 3px solid var(--leaf-dark);
+            box-shadow: 5px 5px 0 #d1fae5;
         }
-        .metric .label { font-size: 13px; font-weight: 800; color: var(--kitty-muted); }
+        .metric .label { font-size: 13px; font-weight: 800; color: var(--leaf-mid); }
         .metric .num { margin-top: 6px; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 46px; line-height: 1; }
-        .metric.total .num { color: var(--kitty-ink); }
-        .metric.pending { border-color: var(--kitty-gold); box-shadow: 5px 5px 0 #fefcbf; }
-        .metric.pending .num { color: #d69e2e; }
-        .metric.approved { border-color: var(--kitty-mint); box-shadow: 5px 5px 0 #b2f5ea; }
-        .metric.approved .num { color: #2c7a7b; }
-        .metric.rejected { border-color: var(--kitty-bow); box-shadow: 5px 5px 0 var(--kitty-pink-soft); }
-        .metric.rejected .num { color: var(--kitty-bow); }
+        .metric.total .num { color: var(--leaf-dark); }
+        .metric.pending { border-color: #d97706; box-shadow: 5px 5px 0 #fef3c7; }
+        .metric.pending .num { color: #d97706; }
+        .metric.approved { border-color: #059669; box-shadow: 5px 5px 0 #a7f3d0; }
+        .metric.approved .num { color: #059669; }
+        .metric.rejected { border-color: var(--danger); box-shadow: 5px 5px 0 #ffe4e6; }
+        .metric.rejected .num { color: var(--danger); }
 
         .panel {
             position: relative;
             margin-top: 16px;
             padding: 32px 24px 22px;
             border-radius: 30px;
-            background: var(--kitty-white);
-            border: 3px solid var(--kitty-ink);
-            box-shadow: 7px 7px 0 var(--kitty-pink-soft);
+            background: var(--petal-white);
+            border: 3px solid var(--leaf-dark);
+            box-shadow: 7px 7px 0 #d1fae5;
         }
         .panel h2 {
             display: inline-block;
@@ -135,89 +140,92 @@
             font-family: 'Fredoka', sans-serif;
             font-weight: 600;
             font-size: 22px;
-            color: var(--kitty-ink);
+            color: var(--leaf-dark);
         }
 
-        thead tr { border-bottom: 2px dashed var(--kitty-pink) !important; background: var(--kitty-bg); }
-        thead th { color: var(--kitty-ink) !important; font-size: 13px; font-weight: 800; }
+        thead tr { border-bottom: 2px dashed #86efac !important; background: #f0fdf4; }
+        thead th { color: var(--leaf-dark) !important; font-size: 13px; font-weight: 800; }
         #userTableBody { font-size: 13px; }
-        .row { border-bottom: 1px solid #ffe4ee; transition: background 0.15s ease; }
-        .row:hover { background: #fff0f6; }
+        .row { border-bottom: 1px solid #dcfce7; transition: background 0.15s ease; }
+        .row:hover { background: #fdf2f8; }
 
-        .cell-name { color: var(--kitty-ink); font-weight: 800; }
-        .cell-user { color: var(--kitty-bow); font-weight: 800; }
-        .cell-contact { color: var(--kitty-muted); }
-        .cell-date { color: #9c7a8a; }
-        .cell-traffic { color: #2b6cb0; font-family: monospace; font-size: 11px; font-weight: 700; }
-        .msg-empty { color: #9c7a8a; }
-        .msg-error { color: var(--kitty-danger); font-weight: 800; }
+        .cell-name { color: var(--leaf-dark); font-weight: 800; }
+        .cell-user { color: #db2777; font-weight: 800; }
+        .cell-contact { color: var(--leaf-mid); }
+        .cell-date { color: #6b9080; }
+        .cell-traffic { color: #047857; font-family: monospace; font-size: 11px; font-weight: 700; }
+        .msg-empty { color: #6b9080; }
+        .msg-error { color: var(--danger); font-weight: 800; }
 
         .badge { display: inline-block; padding: 3px 12px; border-radius: 999px; border: 2px solid; font-size: 12px; font-weight: 800; }
-        .badge-ok { background: #e6fffa; color: #234e52; border-color: var(--kitty-mint); }
-        .badge-no { background: #fff5f7; color: var(--kitty-bow); border-color: var(--kitty-bow); }
-        .badge-wait { background: #fffff0; color: #975a16; border-color: var(--kitty-gold); }
+        .badge-ok { background: #ecfdf5; color: #065f46; border-color: var(--leaf-mint); }
+        .badge-no { background: #fff1f2; color: #9f1239; border-color: var(--danger); }
+        .badge-wait { background: #fffbeb; color: #92400e; border-color: var(--pollen); }
 
         .act {
             padding: 6px 14px;
-            border: 2px solid var(--kitty-ink);
+            border: 2px solid var(--leaf-dark);
             border-radius: 12px;
             font-family: 'Nunito', sans-serif;
             font-size: 12px;
             font-weight: 800;
             cursor: pointer;
-            box-shadow: 0 3px 0 var(--kitty-ink);
+            box-shadow: 0 3px 0 var(--leaf-dark);
             transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.2s ease;
         }
         .act:hover { filter: brightness(1.06); }
-        .act:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--kitty-ink); }
-        .act-approve { background: #81e6d9; color: #1d4044; }
-        .act-reject { background: var(--kitty-pink-soft); color: var(--kitty-bow); }
-        .act-drop { background: #edf2f7; color: var(--kitty-ink); }
-        .act-drop:hover { background: var(--kitty-danger); color: #fff; }
+        .act:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--leaf-dark); }
+        .act-approve { background: #6ee7b7; color: #064e3b; }
+        .act-reject { background: var(--rose-soft); color: #9d174d; }
+        .act-drop { background: #f3f4f6; color: var(--leaf-dark); }
+        .act-drop:hover { background: var(--danger); color: #fff; }
     </style>
 </head>
 <body class="p-6">
     <div class="max-w-7xl mx-auto space-y-8">
 
+        <!-- Header -->
         <div class="flex flex-wrap justify-between items-center gap-4 head-line pb-5">
             <div>
                 <h1 class="brand flex items-center gap-3">
-                    <span class="w-4 h-4 rounded-full animate-pulse" style="background: var(--kitty-bow); box-shadow: 0 0 12px var(--kitty-bow);"></span>
-                    HELLO KITTY HOTSPOT ADMIN
+                    <span class="w-4 h-4 rounded-full animate-pulse" style="background: var(--rose-main); box-shadow: 0 0 12px var(--rose-main);"></span>
+                    BLOOM HOTSPOT ADMIN
                 </h1>
-                <p class="tagline" id="mikrotikStatusTag">🎀 RouterOS Interface: wlan1-hotspot</p>
+                <p class="tagline">🌸 RouterOS Interface: wlan1-hotspot</p>
             </div>
             <button onclick="loadUsers()" class="btn-refresh flex items-center gap-2">
-                🍎 REFRESH DATA
+                🌷 REFRESH DATA
             </button>
         </div>
 
+        <!-- Metric Cards -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
             <div class="metric total">
-                <div class="label">🎀 Total Registrations</div>
+                <div class="label">🌼 Total Registrations</div>
                 <div class="num" id="totalCount">0</div>
             </div>
             <div class="metric pending">
-                <div class="label">⏳ Pending Approval</div>
+                <div class="label">🌱 Pending Approval</div>
                 <div class="num" id="pendingCount">0</div>
             </div>
             <div class="metric approved">
-                <div class="label">🌸 Approved / Active</div>
+                <div class="label">🌺 Approved / Active</div>
                 <div class="num" id="approvedCount">0</div>
             </div>
             <div class="metric rejected">
-                <div class="label">🚫 Blocked / Rejected</div>
+                <div class="label">🥀 Blocked / Rejected</div>
                 <div class="num" id="rejectedCount">0</div>
             </div>
         </div>
 
+        <!-- Table Section -->
         <div class="panel">
-            <div class="kitty-bow">
-                <div class="kitty-bow-knot"></div>
+            <div class="flower-ornament">
+                <div class="flower-bloom"></div>
             </div>
-            <h2>🎀 Subscriber Active Session & Live Traffic Table 🌸</h2>
+            <h2>🌸 Subscriber Active Session & Live Traffic Table 🌿</h2>
 
-            <div class="overflow-x-auto rounded-2xl border-2 border-[#ffe4ee]">
+            <div class="overflow-x-auto rounded-2xl border-2 border-[#dcfce7]">
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="text-xs mono">
@@ -241,50 +249,30 @@
 
     <script>
         const BACKEND_URL = 'https://dinda-cyntia.vercel.app';
-        let isLoading = false;
 
+        // Fungsi helper untuk mengubah bytes menjadi format yang mudah dibaca (KB, MB, GB)
         function formatBytes(bytes) {
-            const num = Number(bytes);
-            if (!num || Number.isNaN(num) || num <= 0) return '0 B';
+            if (!bytes || bytes === 0) return '0 B';
             const k = 1024;
             const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-            const i = Math.min(Math.floor(Math.log(num) / Math.log(k)), sizes.length - 1);
-            return parseFloat((num / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-        }
-
-        function escapeHtml(val) {
-            return String(val ?? '')
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;');
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
         }
 
         async function loadUsers() {
-            if (isLoading) return;
-            isLoading = true;
-
             const tableBody = document.getElementById('userTableBody');
-            const statusTag = document.getElementById('mikrotikStatusTag');
-
             try {
-                const response = await fetch(`${BACKEND_URL}/api/users`, { cache: 'no-store' });
+                const response = await fetch(`${BACKEND_URL}/api/users`);
                 const data = await response.json();
 
-                if (!response.ok || !data.success || !Array.isArray(data.users)) {
-                    const msg = data?.message || `Gagal mengambil data pengguna (HTTP ${response.status}).`;
-                    tableBody.innerHTML = `<tr><td colspan="6" class="p-4 text-center msg-error">${escapeHtml(msg)}</td></tr>`;
+                if (!data.success || !data.users) {
+                    tableBody.innerHTML = `<tr><td colspan="6" class="p-4 text-center msg-error">Gagal mengambil data pengguna.</td></tr>`;
                     return;
-                }
-
-                if (statusTag) {
-                    statusTag.textContent = data.mikrotikConnected
-                        ? '🎀 RouterOS Interface: wlan1-hotspot (Connected)'
-                        : '🎀 RouterOS Interface: wlan1-hotspot (Disconnected)';
                 }
 
                 const users = data.users;
 
+                // Update Counter
                 document.getElementById('totalCount').textContent = users.length;
                 document.getElementById('pendingCount').textContent = users.filter(u => u.status === 'pending').length;
                 document.getElementById('approvedCount').textContent = users.filter(u => u.status === 'approved').length;
@@ -295,6 +283,7 @@
                     return;
                 }
 
+                // Render Data Table dengan Statistik Live Trafik MikroTik
                 tableBody.innerHTML = users.map(user => {
                     let statusBadge = '';
                     if (user.status === 'approved') {
@@ -306,42 +295,40 @@
                     }
 
                     const dateStr = user.createdAt ? new Date(user.createdAt).toLocaleString('id-ID') : '-';
-
-                    let trafficInfo = `<span class="text-pink-300">Offline / Belum Aktif</span>`;
+                    
+                    // Menampilkan data statistik trafik jika user aktif / approved
+                    let trafficInfo = `<span class="text-emerald-600/60">Offline / Belum Aktif</span>`;
                     if (user.status === 'approved') {
-                        const rawIn = user.bytesIn ?? user.stats?.['bytes-in'] ?? user.stats?.bytesIn ?? 0;
-                        const rawOut = user.bytesOut ?? user.stats?.['bytes-out'] ?? user.stats?.bytesOut ?? 0;
-                        const rawUptime = user.uptime ?? user.stats?.uptime ?? 'Off';
-
+                        const bytesIn = formatBytes(user.stats ? user.stats['bytes-in'] : 0);
+                        const bytesOut = formatBytes(user.stats ? user.stats['bytes-out'] : 0);
+                        const uptime = user.stats ? user.stats.uptime : 'Off';
                         trafficInfo = `
-                            <div>📥 In: ${escapeHtml(formatBytes(rawIn))}</div>
-                            <div>📤 Out: ${escapeHtml(formatBytes(rawOut))}</div>
-                            <div>⏱️ Uptime: ${escapeHtml(rawUptime)}</div>
+                            <div>📥 In: ${bytesIn}</div>
+                            <div>📤 Out: ${bytesOut}</div>
+                            <div>⏱️ Uptime: ${uptime}</div>
                         `;
                     }
-
-                    const safeUsername = escapeHtml(user.username);
 
                     return `
                         <tr class="row">
                             <td class="p-3">
-                                <div class="cell-name">${escapeHtml(user.name || '-')}</div>
-                                <div class="cell-user">user: ${safeUsername}</div>
-                                <div class="text-pink-400 text-[11px]">pass: ${escapeHtml(user.password || '******')}</div>
+                                <div class="cell-name">${user.name || '-'}</div>
+                                <div class="cell-user">user: ${user.username}</div>
+                                <div class="text-emerald-700/70 text-[11px]">pass: ${user.password || '******'}</div>
                             </td>
                             <td class="p-3 cell-contact">
-                                <div>${escapeHtml(user.email || '-')}</div>
-                                <div>${escapeHtml(user.phone || '-')}</div>
+                                <div>${user.email || '-'}</div>
+                                <div>${user.phone || '-'}</div>
                             </td>
                             <td class="p-3">${statusBadge}</td>
                             <td class="p-3 cell-traffic">${trafficInfo}</td>
-                            <td class="p-3 cell-date">${escapeHtml(dateStr)}</td>
+                            <td class="p-3 cell-date">${dateStr}</td>
                             <td class="p-3 text-right space-x-2">
                                 ${user.status === 'pending' ? `
-                                    <button onclick="approveUser('${safeUsername}')" class="act act-approve">APPROVE</button>
-                                    <button onclick="rejectUser('${safeUsername}')" class="act act-reject">REJECT</button>
+                                    <button onclick="approveUser('${user.username}')" class="act act-approve">APPROVE</button>
+                                    <button onclick="rejectUser('${user.username}')" class="act act-reject">REJECT</button>
                                 ` : ''}
-                                <button onclick="deleteUser('${safeUsername}')" class="act act-drop">DROP</button>
+                                <button onclick="deleteUser('${user.username}')" class="act act-drop">DROP</button>
                             </td>
                         </tr>
                     `;
@@ -349,9 +336,7 @@
 
             } catch (err) {
                 console.error(err);
-                tableBody.innerHTML = `<tr><td colspan="6" class="p-4 text-center msg-error">Terjadi kesalahan koneksi ke API: ${escapeHtml(err.message)}</td></tr>`;
-            } finally {
-                isLoading = false;
+                tableBody.innerHTML = `<tr><td colspan="6" class="p-4 text-center msg-error">Terjadi kesalahan koneksi ke API.</td></tr>`;
             }
         }
 
@@ -390,7 +375,7 @@
         async function deleteUser(username) {
             if (!confirm(`Hapus permanen user ${username}?`)) return;
             try {
-                const res = await fetch(`${BACKEND_URL}/api/users/${encodeURIComponent(username)}`, { method: 'DELETE' });
+                const res = await fetch(`${BACKEND_URL}/api/users/${username}`, { method: 'DELETE' });
                 const result = await res.json();
                 alert(result.message);
                 loadUsers();
@@ -399,9 +384,10 @@
             }
         }
 
+        // Jalankan otomatis saat halaman dimuat dan refresh setiap 10 detik untuk statistik real-time
         document.addEventListener('DOMContentLoaded', () => {
             loadUsers();
-            setInterval(loadUsers, 10000);
+            setInterval(loadUsers, 10000); // Auto-refresh data & trafik tiap 10 detik
         });
     </script>
 </body>
