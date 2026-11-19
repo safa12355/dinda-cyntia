@@ -8,15 +8,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --garden-bg: #f6fbf7;      /* Latar hijau sage sangat lembut */
-            --petal-white: #ffffff;    /* Putih kelopak bunga */
-            --rose-main: #f472b6;      /* Pink kelopak utama */
-            --rose-soft: #fce7f3;      /* Pink sakura lembut */
-            --leaf-dark: #1e3a2f;      /* Hijau hutan gelap untuk teks & border */
-            --leaf-mid: #3b6e58;       /* Hijau daun */
-            --leaf-mint: #34d399;      /* Hijau segar aktif */
-            --pollen: #fbbf24;         /* Kuning serbuk sari */
-            --danger: #f43f5e;         /* Merah mawar blokir */
+            --garden-bg: #f6fbf7;
+            --petal-white: #ffffff;
+            --rose-main: #f472b6;
+            --rose-soft: #fce7f3;
+            --leaf-dark: #1e3a2f;
+            --leaf-mid: #3b6e58;
+            --leaf-mint: #34d399;
+            --pollen: #fbbf24;
+            --danger: #f43f5e;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -24,7 +24,6 @@
             color: var(--leaf-dark);
             font-family: 'Nunito', sans-serif;
             background-color: var(--garden-bg);
-            /* Pola bunga kelopak lima & daun kecil di background */
             background-image:
                 radial-gradient(circle at 12% 12%, rgba(244, 114, 182, 0.14), transparent 40%),
                 radial-gradient(circle at 88% 88%, rgba(52, 211, 153, 0.16), transparent 42%),
@@ -33,14 +32,12 @@
             background-attachment: fixed;
         }
 
-        /* Ornamen Bunga & Daun di Atas Panel Tabel */
         .flower-ornament {
             position: absolute; top: -24px; left: 32px;
             width: 84px; height: 48px;
             pointer-events: none;
             z-index: 10;
         }
-        /* Sepasang Daun Hijau di Kiri & Kanan Bunga */
         .flower-ornament::before, .flower-ornament::after {
             content: ""; position: absolute; bottom: 6px;
             width: 28px; height: 18px;
@@ -51,7 +48,6 @@
         .flower-ornament::before { left: 4px; transform: rotate(-18deg); }
         .flower-ornament::after { right: 4px; transform: scaleX(-1) rotate(-18deg); }
 
-        /* Kepala Bunga Mekar di Tengah */
         .flower-bloom {
             position: absolute; top: 2px; left: 50%;
             transform: translateX(-50%);
@@ -191,7 +187,7 @@
                     <span class="w-4 h-4 rounded-full animate-pulse" style="background: var(--rose-main); box-shadow: 0 0 12px var(--rose-main);"></span>
                     BLOOM HOTSPOT ADMIN
                 </h1>
-                <p class="tagline">🌸 RouterOS Interface: wlan1-hotspot</p>
+                <p class="tagline" id="mikrotikStatusTag">🌸 RouterOS Interface: wlan1-hotspot</p>
             </div>
             <button onclick="loadUsers()" class="btn-refresh flex items-center gap-2">
                 🌷 REFRESH DATA
@@ -249,30 +245,50 @@
 
     <script>
         const BACKEND_URL = 'https://dinda-cyntia.vercel.app';
+        let isLoadingUsers = false;
 
-        // Fungsi helper untuk mengubah bytes menjadi format yang mudah dibaca (KB, MB, GB)
         function formatBytes(bytes) {
-            if (!bytes || bytes === 0) return '0 B';
+            const num = Number(bytes);
+            if (!num || Number.isNaN(num) || num <= 0) return '0 B';
             const k = 1024;
             const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            const i = Math.min(Math.floor(Math.log(num) / Math.log(k)), sizes.length - 1);
+            return parseFloat((num / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function escapeHtml(val) {
+            return String(val ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
         }
 
         async function loadUsers() {
+            if (isLoadingUsers) return;
+            isLoadingUsers = true;
+
             const tableBody = document.getElementById('userTableBody');
+            const statusTag = document.getElementById('mikrotikStatusTag');
+
             try {
-                const response = await fetch(`${BACKEND_URL}/api/users`);
+                const response = await fetch(`${BACKEND_URL}/api/users`, { cache: 'no-store' });
                 const data = await response.json();
 
-                if (!data.success || !data.users) {
-                    tableBody.innerHTML = `<tr><td colspan="6" class="p-4 text-center msg-error">Gagal mengambil data pengguna.</td></tr>`;
+                if (!response.ok || !data.success || !Array.isArray(data.users)) {
+                    const errMsg = data?.message || `Gagal mengambil data pengguna (HTTP ${response.status}).`;
+                    tableBody.innerHTML = `<tr><td colspan="6" class="p-4 text-center msg-error">${escapeHtml(errMsg)}</td></tr>`;
                     return;
+                }
+
+                if (statusTag && typeof data.mikrotikConnected === 'boolean') {
+                    statusTag.textContent = data.mikrotikConnected
+                        ? '🌸 RouterOS Interface: wlan1-hotspot (Connected)'
+                        : '🌸 RouterOS Interface: wlan1-hotspot (Disconnected)';
                 }
 
                 const users = data.users;
 
-                // Update Counter
                 document.getElementById('totalCount').textContent = users.length;
                 document.getElementById('pendingCount').textContent = users.filter(u => u.status === 'pending').length;
                 document.getElementById('approvedCount').textContent = users.filter(u => u.status === 'approved').length;
@@ -283,7 +299,6 @@
                     return;
                 }
 
-                // Render Data Table dengan Statistik Live Trafik MikroTik
                 tableBody.innerHTML = users.map(user => {
                     let statusBadge = '';
                     if (user.status === 'approved') {
@@ -295,40 +310,42 @@
                     }
 
                     const dateStr = user.createdAt ? new Date(user.createdAt).toLocaleString('id-ID') : '-';
-                    
-                    // Menampilkan data statistik trafik jika user aktif / approved
+
                     let trafficInfo = `<span class="text-emerald-600/60">Offline / Belum Aktif</span>`;
                     if (user.status === 'approved') {
-                        const bytesIn = formatBytes(user.stats ? user.stats['bytes-in'] : 0);
-                        const bytesOut = formatBytes(user.stats ? user.stats['bytes-out'] : 0);
-                        const uptime = user.stats ? user.stats.uptime : 'Off';
+                        const rawIn = user.bytesIn ?? user.stats?.['bytes-in'] ?? user.stats?.bytesIn ?? 0;
+                        const rawOut = user.bytesOut ?? user.stats?.['bytes-out'] ?? user.stats?.bytesOut ?? 0;
+                        const rawUptime = user.uptime ?? user.stats?.uptime ?? 'Off';
+
                         trafficInfo = `
-                            <div>📥 In: ${bytesIn}</div>
-                            <div>📤 Out: ${bytesOut}</div>
-                            <div>⏱️ Uptime: ${uptime}</div>
+                            <div>📥 In: ${escapeHtml(formatBytes(rawIn))}</div>
+                            <div>📤 Out: ${escapeHtml(formatBytes(rawOut))}</div>
+                            <div>⏱️ Uptime: ${escapeHtml(rawUptime)}</div>
                         `;
                     }
+
+                    const safeUsername = escapeHtml(user.username);
 
                     return `
                         <tr class="row">
                             <td class="p-3">
-                                <div class="cell-name">${user.name || '-'}</div>
-                                <div class="cell-user">user: ${user.username}</div>
-                                <div class="text-emerald-700/70 text-[11px]">pass: ${user.password || '******'}</div>
+                                <div class="cell-name">${escapeHtml(user.name || '-')}</div>
+                                <div class="cell-user">user: ${safeUsername}</div>
+                                <div class="text-emerald-700/70 text-[11px]">pass: ${escapeHtml(user.password || '******')}</div>
                             </td>
                             <td class="p-3 cell-contact">
-                                <div>${user.email || '-'}</div>
-                                <div>${user.phone || '-'}</div>
+                                <div>${escapeHtml(user.email || '-')}</div>
+                                <div>${escapeHtml(user.phone || '-')}</div>
                             </td>
                             <td class="p-3">${statusBadge}</td>
                             <td class="p-3 cell-traffic">${trafficInfo}</td>
-                            <td class="p-3 cell-date">${dateStr}</td>
+                            <td class="p-3 cell-date">${escapeHtml(dateStr)}</td>
                             <td class="p-3 text-right space-x-2">
                                 ${user.status === 'pending' ? `
-                                    <button onclick="approveUser('${user.username}')" class="act act-approve">APPROVE</button>
-                                    <button onclick="rejectUser('${user.username}')" class="act act-reject">REJECT</button>
+                                    <button onclick="approveUser('${safeUsername}')" class="act act-approve">APPROVE</button>
+                                    <button onclick="rejectUser('${safeUsername}')" class="act act-reject">REJECT</button>
                                 ` : ''}
-                                <button onclick="deleteUser('${user.username}')" class="act act-drop">DROP</button>
+                                <button onclick="deleteUser('${safeUsername}')" class="act act-drop">DROP</button>
                             </td>
                         </tr>
                     `;
@@ -336,7 +353,9 @@
 
             } catch (err) {
                 console.error(err);
-                tableBody.innerHTML = `<tr><td colspan="6" class="p-4 text-center msg-error">Terjadi kesalahan koneksi ke API.</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="6" class="p-4 text-center msg-error">Terjadi kesalahan koneksi ke API: ${escapeHtml(err.message)}</td></tr>`;
+            } finally {
+                isLoadingUsers = false;
             }
         }
 
@@ -375,7 +394,7 @@
         async function deleteUser(username) {
             if (!confirm(`Hapus permanen user ${username}?`)) return;
             try {
-                const res = await fetch(`${BACKEND_URL}/api/users/${username}`, { method: 'DELETE' });
+                const res = await fetch(`${BACKEND_URL}/api/users/${encodeURIComponent(username)}`, { method: 'DELETE' });
                 const result = await res.json();
                 alert(result.message);
                 loadUsers();
@@ -384,10 +403,9 @@
             }
         }
 
-        // Jalankan otomatis saat halaman dimuat dan refresh setiap 10 detik untuk statistik real-time
         document.addEventListener('DOMContentLoaded', () => {
             loadUsers();
-            setInterval(loadUsers, 10000); // Auto-refresh data & trafik tiap 10 detik
+            setInterval(loadUsers, 10000);
         });
     </script>
 </body>
